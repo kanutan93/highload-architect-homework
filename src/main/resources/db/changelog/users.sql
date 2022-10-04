@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     id         INT              NOT NULL AUTO_INCREMENT,
+    email      VARCHAR(50)      NOT NULL,
     password   TEXT             NOT NULL,
     first_name VARCHAR(50)      NOT NULL,
     last_name  VARCHAR(50)      NOT NULL,
@@ -8,5 +9,6 @@ CREATE TABLE IF NOT EXISTS users
     sex        ENUM ('M', 'W')  NOT NULL,
     about_info TEXT,
     city       VARCHAR(50)      NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE  (email)
 );

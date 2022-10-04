@@ -1,0 +1,33 @@
+package ru.hl.socialnetwork.repository.impl;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import ru.hl.socialnetwork.dao.FriendDao;
+import ru.hl.socialnetwork.mapper.friend.FriendDaoRowMapper;
+import ru.hl.socialnetwork.mapper.user.UserDaoRowMapper;
+import ru.hl.socialnetwork.repository.FriendRepository;
+
+import java.util.List;
+
+@Slf4j
+@Repository
+@RequiredArgsConstructor
+public class FriendRepositoryImpl implements FriendRepository {
+
+  private final JdbcTemplate jdbcTemplate;
+
+  @Override
+  public void save(FriendDao friendDao) {
+    jdbcTemplate.update("INSERT INTO friends (sender_id, receiver_id, is_approved)" +
+            "VALUES (?, ?, ?)", friendDao.getSenderId(), friendDao.getReceiverId(), friendDao.isApproved());
+  }
+
+  @Override
+  public List<FriendDao> getFriendsById(Integer id) {
+    return jdbcTemplate.query(
+        "SELECT * FROM friends WHERE sender_id = ? OR receiver_id = ?", new FriendDaoRowMapper(), id, id);
+  }
+
+}
