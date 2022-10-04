@@ -20,14 +20,13 @@ public class FriendRepositoryImpl implements FriendRepository {
 
   @Override
   public void save(FriendDao friendDao) {
-    jdbcTemplate.update("INSERT INTO friends (sender_id, receiver_id, is_approved)" +
-            "VALUES (?, ?, ?)", friendDao.getSenderId(), friendDao.getReceiverId(), friendDao.isApproved());
+    jdbcTemplate.update("INSERT INTO friends (sender_id, receiver_id, is_approved) VALUES (?, ?, ?)",
+        friendDao.getSenderId(), friendDao.getReceiverId(), friendDao.isApproved());
   }
 
   @Override
-  public List<FriendDao> getFriendsById(Integer id) {
-    return jdbcTemplate.query(
-        "SELECT * FROM friends WHERE sender_id = ? OR receiver_id = ?", new FriendDaoRowMapper(), id, id);
+  public void removeBySenderIdOrReceiverId(Integer id) {
+    jdbcTemplate.update("DELETE FROM friends WHERE sender_id = ? OR reveiver_id = ?",
+        id, id);
   }
-
 }

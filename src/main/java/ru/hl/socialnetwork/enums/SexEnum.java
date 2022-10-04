@@ -1,6 +1,7 @@
 package ru.hl.socialnetwork.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SexEnum {
   M("M"),
@@ -12,6 +13,7 @@ public enum SexEnum {
     this.value = value;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }

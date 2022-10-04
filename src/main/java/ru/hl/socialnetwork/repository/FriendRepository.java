@@ -6,6 +6,6 @@ public interface FriendRepository {
 
   void save(FriendDao friendDao);
 
-  FriendDao getFriendsById(Integer id);
+  void removeBySenderIdOrReceiverId(Integer id);
 
 }

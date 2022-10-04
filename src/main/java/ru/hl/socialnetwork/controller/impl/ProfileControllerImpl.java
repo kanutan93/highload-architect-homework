@@ -26,8 +26,14 @@ public class ProfileControllerImpl implements ProfileController {
   }
 
   @Override
-  public ResponseEntity<Void> addToFriend(Integer id) {
-    profileService.addToUserProfileToFriends(id);
+  public ResponseEntity<Void> addToFriends(Integer id) {
+    profileService.addUserProfileToFriends(id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  public ResponseEntity<Void> removeFromFriends(Integer id) {
+    profileService.removeUserProfileFromFriends(id);
     return ResponseEntity.noContent().build();
   }
 }

@@ -9,6 +9,7 @@ import ru.hl.socialnetwork.dao.UserDao;
 import ru.hl.socialnetwork.dto.request.RegisterProfileRequestDto;
 import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
 import ru.hl.socialnetwork.mapper.user.UserDaoMapper;
+import ru.hl.socialnetwork.repository.FriendRepository;
 import ru.hl.socialnetwork.repository.UserRepository;
 import ru.hl.socialnetwork.service.ProfileService;
 
@@ -18,14 +19,16 @@ import ru.hl.socialnetwork.service.ProfileService;
 public class ProfileServiceImpl implements ProfileService {
 
   private final UserRepository userRepository;
+  private final FriendRepository friendRepository;
   private final UserDaoMapper userDaoMapper;
+
+  private final BCryptPasswordEncoder passwordEncoder;
 
   @Override
   @Transactional
   public void register(RegisterProfileRequestDto registerProfileRequestDto) {
     log.info("Trying to register user with email: {}", registerProfileRequestDto.getEmail());
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     String encodedPassword = passwordEncoder.encode(registerProfileRequestDto.getPassword());
     registerProfileRequestDto.setPassword(encodedPassword);
 
@@ -41,12 +44,15 @@ public class ProfileServiceImpl implements ProfileService {
   public ProfileResponseDto getCurrentProfile() {
     log.info("Trying to get current user profile");
 
-    UserDao currentUserDao = userRepository.getUserByEmail(email);
-    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
+    //TODO
+//    UserDao currentUserDao = userRepository.getUserByEmail(email);
+//    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
+//
+//    log.info("Current user profile with email: {} has been received successfully", result.getEmail());
+//
+//    return result;
 
-    log.info("Current user profile with email: {} has been received successfully", result.getEmail());
-
-    return result;
+    return null;
   }
 
   @Override
@@ -64,12 +70,22 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   @Transactional
-  public void addToUserProfileToFriends(Integer id) {
+  public void addUserProfileToFriends(Integer id) {
     log.info("Trying to add user profile with id: {} to friends for current profile", id);
 
-    UserDao currentUserDao = userRepository.getUserById(id);
-    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
+    //TODO
+//    friendRepository.save(id);
 
-    log.info("User profile with id: {} was added to friends for current profile", id, result.getEmail());
+    log.info("User profile with id: {} was added to friends for current profile", id);
+  }
+
+  @Override
+  @Transactional
+  public void removeUserProfileFromFriends(Integer id) {
+    log.info("Trying to remove user profile with id: {} from friends for current profile", id);
+
+    friendRepository.removeBySenderIdOrReceiverId(id);
+
+    log.info("User profile with id: {} was removed from friends for current profile", id);
   }
 }

@@ -11,5 +11,7 @@ public interface ProfileService {
 
   ProfileResponseDto getUserProfile(Integer id);
 
-  void addToUserProfileToFriends(Integer id);
+  void addUserProfileToFriends(Integer id);
+
+  void removeUserProfileFromFriends(Integer id);
 }
