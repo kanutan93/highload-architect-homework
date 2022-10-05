@@ -59,6 +59,7 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
 
