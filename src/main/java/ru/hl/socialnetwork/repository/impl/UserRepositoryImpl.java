@@ -27,26 +27,29 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<UserDao> searchUsers(String search, Integer page, Integer limit) {
+  public List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit) {
     search = "%" + search + "%";
     return jdbcTemplate.query("SELECT * FROM users " +
-            "WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? " +
+            "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
+            "WHERE email <> ? AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?) " +
             "LIMIT ? OFFSET ? ",
         new UserDaoRowMapper(),
-        search, search, search, limit, page * limit);
+        currentUserEmail, search, search, search, limit, page * limit);
   }
 
   @Override
-  public UserDao getUserById(Integer id) {
+  public UserDao getById(Integer id) {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM users " +
-            "WHERE id = ?", new UserDaoRowMapper(), id);
+            "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
+            "WHERE users.id = ?", new UserDaoRowMapper(), id);
   }
 
   @Override
-  public UserDao getUserByEmail(String email) {
+  public UserDao getByEmail(String email) {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM users " +
+            "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
             "WHERE email = ?", new UserDaoRowMapper(), email);
   }
 }

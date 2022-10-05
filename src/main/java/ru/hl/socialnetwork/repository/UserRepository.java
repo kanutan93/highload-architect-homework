@@ -8,9 +8,9 @@ public interface UserRepository {
 
   void save(UserDao userDao);
 
-  List<UserDao> searchUsers(String search, Integer page, Integer limit);
+  List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit);
 
-  UserDao getUserById(Integer id);
+  UserDao getById(Integer id);
 
-  UserDao getUserByEmail(String email);
+  UserDao getByEmail(String email);
 }

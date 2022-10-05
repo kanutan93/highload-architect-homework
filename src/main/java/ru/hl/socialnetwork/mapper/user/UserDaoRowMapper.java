@@ -21,6 +21,7 @@ public class UserDaoRowMapper implements RowMapper<UserDao> {
     userDao.setSex(SexEnum.fromValue(rs.getString("sex")));
     userDao.setAboutInfo(rs.getString("about_info"));
     userDao.setCity(rs.getString("city"));
+    userDao.setIsApproved(rs.getBoolean("is_approved"));
 
     return userDao;
   }

@@ -14,4 +14,5 @@ public class UserDao {
   private SexEnum sex;
   private String aboutInfo;
   private String city;
+  private Boolean isApproved;
 }

@@ -13,4 +13,5 @@ public class ProfileResponseDto {
   private SexEnum sex;
   private String aboutInfo;
   private String city;
+  private Boolean isFriend;
 }

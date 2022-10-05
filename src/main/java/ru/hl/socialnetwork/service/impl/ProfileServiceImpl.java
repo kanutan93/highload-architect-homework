@@ -50,7 +50,7 @@ public class ProfileServiceImpl implements ProfileService {
     log.info("Trying to get current user profile");
 
     User currentUser = getCurrentUser();
-    UserDao currentUserDao = userRepository.getUserByEmail(currentUser.getUsername());
+    UserDao currentUserDao = userRepository.getByEmail(currentUser.getUsername());
     ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
 
     log.info("Current user profile with email: {} has been received successfully", result.getEmail());
@@ -63,7 +63,8 @@ public class ProfileServiceImpl implements ProfileService {
   public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
 
-    List<UserDao> usersDaos = userRepository.searchUsers(search, page, limit);
+    User currentUser = getCurrentUser();
+    List<UserDao> usersDaos = userRepository.search(currentUser.getUsername(), search, page, limit);
 
     List<ProfileResponseDto> result = usersDaos.stream()
         .map(userDaoMapper::toProfileResponseDto)
@@ -79,7 +80,7 @@ public class ProfileServiceImpl implements ProfileService {
   public ProfileResponseDto getUserProfile(Integer id) {
     log.info("Trying to get user profile with id: {}", id);
 
-    UserDao currentUserDao = userRepository.getUserById(id);
+    UserDao currentUserDao = userRepository.getById(id);
     ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
 
     log.info("User profile with id: {} and email: {} has been received successfully", id, result.getEmail());
@@ -93,7 +94,7 @@ public class ProfileServiceImpl implements ProfileService {
     User currentUser = getCurrentUser();
     log.info("Trying to add user profile with id: {} to friends for current user: {}", id, currentUser.getUsername());
 
-    int senderId = userRepository.getUserByEmail(currentUser.getUsername()).getId();
+    int senderId = userRepository.getByEmail(currentUser.getUsername()).getId();
     FriendDao friendDao = new FriendDao();
     friendDao.setSenderId(senderId);
     friendDao.setReceiverId(id);
@@ -110,7 +111,7 @@ public class ProfileServiceImpl implements ProfileService {
     User currentUser = getCurrentUser();
     log.info("Trying to remove user profile with id: {} from friends for current user: {}", id, currentUser.getUsername());
 
-    int senderId = userRepository.getUserByEmail(currentUser.getUsername()).getId();
+    int senderId = userRepository.getByEmail(currentUser.getUsername()).getId();
     FriendDao friendDao = new FriendDao();
     friendDao.setSenderId(senderId);
     friendDao.setReceiverId(id);
