@@ -8,6 +8,8 @@ import ru.hl.socialnetwork.dao.UserDao;
 import ru.hl.socialnetwork.mapper.user.UserDaoRowMapper;
 import ru.hl.socialnetwork.repository.UserRepository;
 
+import java.util.List;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -17,21 +19,34 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public void save(UserDao userDao) {
-    jdbcTemplate.update("INSERT INTO users (email, password, first_name, last_name, age, sex, about_info, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    jdbcTemplate.update("INSERT INTO users (email, password, first_name, last_name, age, sex, about_info, city) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         userDao.getEmail(), userDao.getPassword(), userDao.getFirstName(),
         userDao.getLastName(), userDao.getAge(), userDao.getSex().getValue(),
         userDao.getAboutInfo(), userDao.getCity());
   }
 
   @Override
+  public List<UserDao> searchUsers(String search, Integer page, Integer limit) {
+    search = "%" + search + "%";
+    return jdbcTemplate.query("SELECT * FROM users " +
+            "WHERE first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ? " +
+            "OFFSET ? LIMIT ?",
+        new UserDaoRowMapper(),
+        search, search, search, page * limit, limit);
+  }
+
+  @Override
   public UserDao getUserById(Integer id) {
     return jdbcTemplate.queryForObject(
-        "SELECT * FROM users WHERE id = ?", new UserDaoRowMapper(), id);
+        "SELECT * FROM users " +
+            "WHERE id = ?", new UserDaoRowMapper(), id);
   }
 
   @Override
   public UserDao getUserByEmail(String email) {
     return jdbcTemplate.queryForObject(
-        "SELECT * FROM users WHERE email = ?", new UserDaoRowMapper(), email);
+        "SELECT * FROM users " +
+            "WHERE email = ?", new UserDaoRowMapper(), email);
   }
 }

@@ -6,13 +6,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
+
+import java.util.List;
 
 @RequestMapping("/api/profile")
 public interface ProfileController {
 
   @GetMapping("/current-profile")
   ResponseEntity<ProfileResponseDto> getCurrentProfile();
+
+  @GetMapping("/user-profiles")
+  ResponseEntity<List<ProfileResponseDto>> getUserProfiles(@RequestParam("search") String search, Integer page, Integer limit);
 
   @GetMapping("/user-profile/{id}")
   ResponseEntity<ProfileResponseDto> getUserProfile(@PathVariable("id") Integer id);

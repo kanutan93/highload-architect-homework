@@ -8,6 +8,8 @@ import ru.hl.socialnetwork.controller.ProfileController;
 import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
 import ru.hl.socialnetwork.service.ProfileService;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +20,11 @@ public class ProfileControllerImpl implements ProfileController {
   @Override
   public ResponseEntity<ProfileResponseDto> getCurrentProfile() {
     return ResponseEntity.ok(profileService.getCurrentProfile());
+  }
+
+  @Override
+  public ResponseEntity<List<ProfileResponseDto>> getUserProfiles(String search, Integer page, Integer limit) {
+    return ResponseEntity.ok(profileService.getUserProfiles(search, page, limit));
   }
 
   @Override

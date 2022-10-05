@@ -13,6 +13,9 @@ import ru.hl.socialnetwork.repository.FriendRepository;
 import ru.hl.socialnetwork.repository.UserRepository;
 import ru.hl.socialnetwork.service.ProfileService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -53,6 +56,21 @@ public class ProfileServiceImpl implements ProfileService {
 //    return result;
 
     return null;
+  }
+
+  @Override
+  public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
+    log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
+
+    List<UserDao> usersDaos = userRepository.searchUsers(search, page, limit);
+
+    List<ProfileResponseDto> result = usersDaos.stream()
+        .map(userDaoMapper::toProfileResponseDto)
+        .collect(Collectors.toList());
+
+    log.info("Found {} user profiles by search: {}, page: {}, limit: {}", result.size(), search, page, limit);
+
+    return result;
   }
 
   @Override
