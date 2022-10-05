@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="1.add-unique-sender_id-receiver_id" author="Dmitry Morozov">
+        <comment>Add unique constraint to sender_id, receiver_id</comment>
+        <sql>
+            ALTER TABLE friends
+            ADD CONSTRAINT unique_sender_id_receiver_id UNIQUE(sender_id, receiver_id);
+        </sql>
+        <rollback>
+            ALTER TABLE friends
+            DROP INDEX unique_sender_id_receiver_id;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

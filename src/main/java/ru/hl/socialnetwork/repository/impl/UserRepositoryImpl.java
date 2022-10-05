@@ -30,10 +30,10 @@ public class UserRepositoryImpl implements UserRepository {
   public List<UserDao> searchUsers(String search, Integer page, Integer limit) {
     search = "%" + search + "%";
     return jdbcTemplate.query("SELECT * FROM users " +
-            "WHERE first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ? " +
-            "OFFSET ? LIMIT ?",
+            "WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? " +
+            "LIMIT ? OFFSET ? ",
         new UserDaoRowMapper(),
-        search, search, search, page * limit, limit);
+        search, search, search, limit, page * limit);
   }
 
   @Override

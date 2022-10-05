@@ -21,8 +21,8 @@ public class FriendRepositoryImpl implements FriendRepository {
   }
 
   @Override
-  public void removeBySenderIdOrReceiverId(Integer id) {
-    jdbcTemplate.update("DELETE FROM friends WHERE sender_id = ? OR receiver_id = ?",
-        id, id);
+  public void remove(FriendDao friendDao) {
+    jdbcTemplate.update("DELETE FROM friends WHERE (sender_id = ? AND receiver_id = ?) OR (receiver_id = ? AND sender_id = ?)",
+        friendDao.getSenderId(), friendDao.getReceiverId(), friendDao.getSenderId(), friendDao.getReceiverId());
   }
 }

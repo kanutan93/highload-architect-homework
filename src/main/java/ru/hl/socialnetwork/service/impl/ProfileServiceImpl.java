@@ -2,9 +2,12 @@ package ru.hl.socialnetwork.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hl.socialnetwork.model.dao.FriendDao;
 import ru.hl.socialnetwork.model.dao.UserDao;
 import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
@@ -24,7 +27,6 @@ public class ProfileServiceImpl implements ProfileService {
   private final UserRepository userRepository;
   private final FriendRepository friendRepository;
   private final UserDaoMapper userDaoMapper;
-
   private final BCryptPasswordEncoder passwordEncoder;
 
   @Override
@@ -47,15 +49,13 @@ public class ProfileServiceImpl implements ProfileService {
   public ProfileResponseDto getCurrentProfile() {
     log.info("Trying to get current user profile");
 
-    //TODO
-//    UserDao currentUserDao = userRepository.getUserByEmail(email);
-//    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
-//
-//    log.info("Current user profile with email: {} has been received successfully", result.getEmail());
-//
-//    return result;
+    User currentUser = getCurrentUser();
+    UserDao currentUserDao = userRepository.getUserByEmail(currentUser.getUsername());
+    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
 
-    return null;
+    log.info("Current user profile with email: {} has been received successfully", result.getEmail());
+
+    return result;
   }
 
   @Override
@@ -90,21 +90,37 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @Transactional
   public void addUserProfileToFriends(Integer id) {
-    log.info("Trying to add user profile with id: {} to friends for current profile", id);
+    User currentUser = getCurrentUser();
+    log.info("Trying to add user profile with id: {} to friends for current user: {}", id, currentUser.getUsername());
 
-    //TODO
-//    friendRepository.save(id);
+    int senderId = userRepository.getUserByEmail(currentUser.getUsername()).getId();
+    FriendDao friendDao = new FriendDao();
+    friendDao.setSenderId(senderId);
+    friendDao.setReceiverId(id);
+    friendDao.setApproved(false);
 
-    log.info("User profile with id: {} was added to friends for current profile", id);
+    friendRepository.save(friendDao);
+
+    log.info("User profile with id: {} was added to friends for current user: {}", id, currentUser.getUsername());
   }
 
   @Override
   @Transactional
   public void removeUserProfileFromFriends(Integer id) {
-    log.info("Trying to remove user profile with id: {} from friends for current profile", id);
+    User currentUser = getCurrentUser();
+    log.info("Trying to remove user profile with id: {} from friends for current user: {}", id, currentUser.getUsername());
 
-    friendRepository.removeBySenderIdOrReceiverId(id);
+    int senderId = userRepository.getUserByEmail(currentUser.getUsername()).getId();
+    FriendDao friendDao = new FriendDao();
+    friendDao.setSenderId(senderId);
+    friendDao.setReceiverId(id);
 
-    log.info("User profile with id: {} was removed from friends for current profile", id);
+    friendRepository.remove(friendDao);
+
+    log.info("User profile with id: {} was removed from friends for current user: {}", id, currentUser.getUsername());
+  }
+
+  private static User getCurrentUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

@@ -6,4 +6,5 @@
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
   <include file="db/changelog/0.init-schema.xml"/>
+  <include file="db/changelog/1.add-unique-sender_id-receiver_id.xml"/>
 </databaseChangeLog>

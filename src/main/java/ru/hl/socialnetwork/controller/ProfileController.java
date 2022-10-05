@@ -18,7 +18,7 @@ public interface ProfileController {
   ResponseEntity<ProfileResponseDto> getCurrentProfile();
 
   @GetMapping("/user-profiles")
-  ResponseEntity<List<ProfileResponseDto>> getUserProfiles(@RequestParam("search") String search, Integer page, Integer limit);
+  ResponseEntity<List<ProfileResponseDto>> getUserProfiles(@RequestParam("search") String search, @RequestParam("page") Integer page, @RequestParam("limit") Integer limit);
 
   @GetMapping("/user-profile/{id}")
   ResponseEntity<ProfileResponseDto> getUserProfile(@PathVariable("id") Integer id);

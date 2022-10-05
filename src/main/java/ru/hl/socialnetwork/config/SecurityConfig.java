@@ -3,18 +3,20 @@ package ru.hl.socialnetwork.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private static final String USERS_QUERY = "SELECT email AS username, password, true FROM users WHERE username = ?";
+  private static final String USERS_QUERY = "SELECT email AS username, password, true AS enabled FROM users WHERE email = ?";
+  private static final String AUTHORITY_QUERY = "SELECT email AS username, 'USER_ROLE' AS authority FROM users WHERE email = ?";
 
   @Autowired
   private DataSource dataSource;
@@ -25,12 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
 
-  @Autowired
-  public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-    auth.jdbcAuthentication()
-        .usersByUsernameQuery(USERS_QUERY)
-        .dataSource(dataSource)
-        .passwordEncoder(passwordEncoder());
+  @Bean
+  public UserDetailsService jdbcUserDetailsService(DataSource dataSource) {
+    JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+
+    users.setUsersByUsernameQuery(USERS_QUERY);
+    users.setAuthoritiesByUsernameQuery(AUTHORITY_QUERY);
+
+    return users;
   }
 
   @Override
@@ -39,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .httpBasic()
         .and()
         .authorizeRequests().antMatchers("/api/auth/register/**").permitAll()
-        .and()
-        .authorizeRequests().anyRequest().authenticated()
+        .anyRequest().authenticated()
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http

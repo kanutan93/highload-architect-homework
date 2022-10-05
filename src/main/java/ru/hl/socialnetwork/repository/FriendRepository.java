@@ -6,6 +6,6 @@ public interface FriendRepository {
 
   void save(FriendDao friendDao);
 
-  void removeBySenderIdOrReceiverId(Integer id);
+  void remove(FriendDao friendDao);
 
 }

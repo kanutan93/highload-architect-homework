@@ -5,6 +5,7 @@ import ru.hl.socialnetwork.model.enums.SexEnum;
 
 @Data
 public class ProfileResponseDto {
+  private Integer id;
   private String email;
   private String firstName;
   private String lastName;
