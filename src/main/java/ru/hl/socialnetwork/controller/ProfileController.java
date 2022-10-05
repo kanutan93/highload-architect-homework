@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
+import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 
 import java.util.List;
 

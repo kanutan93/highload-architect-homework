@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hl.socialnetwork.controller.ProfileController;
-import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
+import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 import ru.hl.socialnetwork.service.ProfileService;
 
 import java.util.List;

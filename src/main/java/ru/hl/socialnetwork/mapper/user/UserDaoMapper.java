@@ -1,9 +1,9 @@
 package ru.hl.socialnetwork.mapper.user;
 
 import org.mapstruct.Mapper;
-import ru.hl.socialnetwork.dao.UserDao;
-import ru.hl.socialnetwork.dto.request.RegisterProfileRequestDto;
-import ru.hl.socialnetwork.dto.response.ProfileResponseDto;
+import ru.hl.socialnetwork.model.dao.UserDao;
+import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 
 @Mapper
 public interface UserDaoMapper {

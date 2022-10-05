@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hl.socialnetwork.dao.UserDao;
+import ru.hl.socialnetwork.model.dao.UserDao;
 import ru.hl.socialnetwork.mapper.user.UserDaoRowMapper;
 import ru.hl.socialnetwork.repository.UserRepository;
 

@@ -1,13 +1,11 @@
-package ru.hl.socialnetwork.dao;
+package ru.hl.socialnetwork.model.dto.response;
 
 import lombok.Data;
-import ru.hl.socialnetwork.enums.SexEnum;
+import ru.hl.socialnetwork.model.enums.SexEnum;
 
 @Data
-public class UserDao {
-  private int id;
+public class ProfileResponseDto {
   private String email;
-  private String password;
   private String firstName;
   private String lastName;
   private short age;

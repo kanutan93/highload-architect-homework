@@ -1,8 +1,8 @@
 package ru.hl.socialnetwork.mapper.user;
 
 import org.springframework.jdbc.core.RowMapper;
-import ru.hl.socialnetwork.dao.UserDao;
-import ru.hl.socialnetwork.enums.SexEnum;
+import ru.hl.socialnetwork.model.dao.UserDao;
+import ru.hl.socialnetwork.model.enums.SexEnum;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

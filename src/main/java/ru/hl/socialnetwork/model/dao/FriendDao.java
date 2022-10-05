@@ -1,4 +1,4 @@
-package ru.hl.socialnetwork.dao;
+package ru.hl.socialnetwork.model.dao;
 
 import lombok.Data;
 

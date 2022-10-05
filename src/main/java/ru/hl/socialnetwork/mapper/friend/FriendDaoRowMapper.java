@@ -1,9 +1,7 @@
 package ru.hl.socialnetwork.mapper.friend;
 
 import org.springframework.jdbc.core.RowMapper;
-import ru.hl.socialnetwork.dao.FriendDao;
-import ru.hl.socialnetwork.dao.UserDao;
-import ru.hl.socialnetwork.enums.SexEnum;
+import ru.hl.socialnetwork.model.dao.FriendDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

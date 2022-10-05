@@ -1,6 +1,6 @@
 package ru.hl.socialnetwork.repository;
 
-import ru.hl.socialnetwork.dao.UserDao;
+import ru.hl.socialnetwork.model.dao.UserDao;
 
 import java.util.List;
 

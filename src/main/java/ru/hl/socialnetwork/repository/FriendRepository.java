@@ -1,6 +1,6 @@
 package ru.hl.socialnetwork.repository;
 
-import ru.hl.socialnetwork.dao.FriendDao;
+import ru.hl.socialnetwork.model.dao.FriendDao;
 
 public interface FriendRepository {
 

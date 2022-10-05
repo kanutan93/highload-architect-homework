@@ -1,4 +1,4 @@
-package ru.hl.socialnetwork.enums;
+package ru.hl.socialnetwork.model.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
