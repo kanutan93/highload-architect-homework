@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hl.socialnetwork.model.dao.UserDao;
 import ru.hl.socialnetwork.mapper.user.UserDaoRowMapper;
+import ru.hl.socialnetwork.model.dao.UserDao;
+import ru.hl.socialnetwork.mapper.user.UserDaoRowMapperWithApproved;
 import ru.hl.socialnetwork.repository.UserRepository;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
             "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
             "WHERE email <> ? AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?) " +
             "LIMIT ? OFFSET ? ",
-        new UserDaoRowMapper(),
+        new UserDaoRowMapperWithApproved(),
         currentUserEmail, search, search, search, limit, page * limit);
   }
 
@@ -52,14 +53,13 @@ public class UserRepositoryImpl implements UserRepository {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM users " +
             "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
-            "WHERE users.id = ?", new UserDaoRowMapper(), id);
+            "WHERE users.id = ?", new UserDaoRowMapperWithApproved(), id);
   }
 
   @Override
   public UserDao getByEmail(String email) {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM users " +
-            "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
             "WHERE email = ?", new UserDaoRowMapper(), email);
   }
 }

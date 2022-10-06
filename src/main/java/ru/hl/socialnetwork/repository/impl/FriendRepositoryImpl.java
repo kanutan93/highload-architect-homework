@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.hl.socialnetwork.mapper.friend.FriendDaoRowMapper;
-import ru.hl.socialnetwork.mapper.user.UserDaoRowMapper;
 import ru.hl.socialnetwork.model.dao.FriendDao;
-import ru.hl.socialnetwork.model.dao.UserDao;
 import ru.hl.socialnetwork.repository.FriendRepository;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class FriendRepositoryImpl implements FriendRepository {
   @Override
   public List<FriendDao> getFriendRequests(Integer currentUserId) {
     return jdbcTemplate.query("SELECT * FROM friends " +
-            "WHERE receiver_id = ?",
+            "WHERE receiver_id = ? AND is_approved = false",
         new FriendDaoRowMapper(),
         currentUserId);
   }
