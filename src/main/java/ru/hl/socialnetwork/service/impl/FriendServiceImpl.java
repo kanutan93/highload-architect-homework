@@ -50,18 +50,25 @@ public class FriendServiceImpl implements FriendService {
     log.info("Trying to add user profile with id: {} to friends for current user: {}", id, currentUser.getUsername());
 
     int currentUserId = userRepository.getByEmail(currentUser.getUsername()).getId();
-    FriendDao friendDao = friendRepository.get(currentUserId, id);
+
+    FriendDao friendDao = null;
+    try {
+      friendDao = friendRepository.get(currentUserId, id);
+    } catch (Exception e) {
+    }
 
     if (friendDao == null) {
       friendDao = new FriendDao();
       friendDao.setSenderId(currentUserId);
       friendDao.setReceiverId(id);
       friendDao.setApproved(false);
+      friendRepository.save(friendDao);
     } else {
-      friendDao.setApproved(true);
+      if (friendDao.getReceiverId() == currentUserId) {
+        friendDao.setApproved(true);
+        friendRepository.update(friendDao.getId(), friendDao);
+      }
     }
-
-    friendRepository.save(friendDao);
 
     log.info("User profile with id: {} was added to friends for current user: {}", id, currentUser.getUsername());
   }

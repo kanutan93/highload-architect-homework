@@ -12,6 +12,8 @@ public interface FriendRepository {
 
   void save(FriendDao friendDao);
 
+  void update(Integer id, FriendDao friendDao);
+
   void remove(Integer senderId, Integer receiverId) ;
 
 }

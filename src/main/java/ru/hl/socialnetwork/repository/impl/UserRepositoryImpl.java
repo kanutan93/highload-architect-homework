@@ -31,9 +31,9 @@ public class UserRepositoryImpl implements UserRepository {
     jdbcTemplate.update("UPDATE users " +
             "SET first_name = ?,last_name = ?,age = ?,sex = ?,about_info = ?,city = ? " +
             "WHERE id = ? ",
-        id, userDao.getFirstName(),
+        userDao.getFirstName(),
         userDao.getLastName(), userDao.getAge(), userDao.getSex().getValue(),
-        userDao.getAboutInfo(), userDao.getCity());
+        userDao.getAboutInfo(), userDao.getCity(), id);
   }
 
   @Override

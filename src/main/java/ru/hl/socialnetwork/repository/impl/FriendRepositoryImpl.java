@@ -43,6 +43,14 @@ public class FriendRepositoryImpl implements FriendRepository {
   }
 
   @Override
+  public void update(Integer id, FriendDao friendDao) {
+    jdbcTemplate.update("UPDATE friends " +
+            "SET is_approved = ? " +
+            "WHERE id = ?",
+        friendDao.isApproved(), id);
+  }
+
+  @Override
   public void remove(Integer senderId, Integer receiverId) {
     jdbcTemplate.update("DELETE FROM friends " +
             "WHERE (sender_id = ? AND receiver_id = ?) OR (receiver_id = ? AND sender_id = ?)",
