@@ -1,6 +1,7 @@
 package ru.hl.socialnetwork.service;
 
 import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.request.UpdateProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 
 import java.util.List;
@@ -11,11 +12,11 @@ public interface ProfileService {
 
   ProfileResponseDto getCurrentProfile();
 
+  ProfileResponseDto updateCurrentProfile(UpdateProfileRequestDto updateProfileRequestDto);
+
   List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit);
 
-  ProfileResponseDto getUserProfile(Integer id);
+  ProfileResponseDto getUserProfile(Integer userId);
 
-  void addUserProfileToFriends(Integer id);
 
-  void removeUserProfileFromFriends(Integer id);
 }

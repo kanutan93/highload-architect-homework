@@ -27,6 +27,16 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public void update(Integer id, UserDao userDao) {
+    jdbcTemplate.update("UPDATE users " +
+            "SET first_name = ?,last_name = ?,age = ?,sex = ?,about_info = ?,city = ? " +
+            "WHERE id = ? ",
+        id, userDao.getFirstName(),
+        userDao.getLastName(), userDao.getAge(), userDao.getSex().getValue(),
+        userDao.getAboutInfo(), userDao.getCity());
+  }
+
+  @Override
   public List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit) {
     search = "%" + search + "%";
     return jdbcTemplate.query("SELECT * FROM users " +

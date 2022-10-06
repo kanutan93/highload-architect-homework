@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hl.socialnetwork.controller.ProfileController;
+import ru.hl.socialnetwork.model.dto.request.UpdateProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 import ru.hl.socialnetwork.service.ProfileService;
 
@@ -23,24 +24,17 @@ public class ProfileControllerImpl implements ProfileController {
   }
 
   @Override
+  public ResponseEntity<ProfileResponseDto> updateCurrentProfile(UpdateProfileRequestDto updateProfileRequestDto) {
+    return ResponseEntity.ok(profileService.updateCurrentProfile(updateProfileRequestDto));
+  }
+
+  @Override
   public ResponseEntity<List<ProfileResponseDto>> getUserProfiles(String search, Integer page, Integer limit) {
     return ResponseEntity.ok(profileService.getUserProfiles(search, page, limit));
   }
 
   @Override
-  public ResponseEntity<ProfileResponseDto> getUserProfile(Integer id) {
-    return ResponseEntity.ok(profileService.getUserProfile(id));
-  }
-
-  @Override
-  public ResponseEntity<Void> addToFriends(Integer id) {
-    profileService.addUserProfileToFriends(id);
-    return ResponseEntity.noContent().build();
-  }
-
-  @Override
-  public ResponseEntity<Void> removeFromFriends(Integer id) {
-    profileService.removeUserProfileFromFriends(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ProfileResponseDto> getUserProfile(Integer userId) {
+    return ResponseEntity.ok(profileService.getUserProfile(userId));
   }
 }

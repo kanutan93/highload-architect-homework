@@ -8,6 +8,8 @@ public interface UserRepository {
 
   void save(UserDao userDao);
 
+  void update(Integer id, UserDao userDao);
+
   List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit);
 
   UserDao getById(Integer id);
