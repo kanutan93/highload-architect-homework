@@ -16,6 +16,8 @@ public interface ProfileService {
 
   List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit);
 
+  List<ProfileResponseDto> getUserProfiles(String firstName, String lastName);
+
   ProfileResponseDto getUserProfile(Integer userId);
 
 

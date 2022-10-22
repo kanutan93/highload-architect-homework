@@ -7,4 +7,5 @@
 
   <include file="db/changelog/0.init-schema.xml"/>
   <include file="db/changelog/1.add-unique-sender_id-receiver_id.xml"/>
+  <include file="db/changelog/2.insert-users.xml"/>
 </databaseChangeLog>

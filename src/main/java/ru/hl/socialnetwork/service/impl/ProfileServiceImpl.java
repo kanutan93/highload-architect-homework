@@ -91,6 +91,22 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   @Transactional(readOnly = true)
+  public List<ProfileResponseDto> getUserProfiles(String firstName, String lastName) {
+    log.info("Trying to search user profiles by firstName: {}, lastName: {}", firstName, lastName);
+
+    List<UserDao> usersDaos = userRepository.searchUsers(firstName, lastName);
+
+    List<ProfileResponseDto> result = usersDaos.stream()
+        .map(userDaoMapper::toProfileResponseDto)
+        .collect(Collectors.toList());
+
+    log.info("Found {} user profiles by firstName: {}, lastName: {}", result.size(), firstName, lastName);
+
+    return result;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public ProfileResponseDto getUserProfile(Integer userId) {
     log.info("Trying to get user profile with id: {}", userId);
 

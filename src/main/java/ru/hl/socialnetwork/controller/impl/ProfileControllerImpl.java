@@ -34,6 +34,11 @@ public class ProfileControllerImpl implements ProfileController {
   }
 
   @Override
+  public ResponseEntity<List<ProfileResponseDto>> getUserProfilesByFirstNameAndLastName(String firstName, String lastName) {
+    return ResponseEntity.ok(profileService.getUserProfiles(firstName, lastName));
+  }
+
+  @Override
   public ResponseEntity<ProfileResponseDto> getUserProfile(Integer userId) {
     return ResponseEntity.ok(profileService.getUserProfile(userId));
   }

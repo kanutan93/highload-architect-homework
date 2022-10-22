@@ -21,8 +21,11 @@ public interface ProfileController {
   @PutMapping("/current-profile")
   ResponseEntity<ProfileResponseDto> updateCurrentProfile(@RequestBody UpdateProfileRequestDto updateProfileRequestDto);
 
-  @GetMapping("/user-profiles")
+  @GetMapping("/user-profiles/search")
   ResponseEntity<List<ProfileResponseDto>> getUserProfiles(@RequestParam("search") String search, @RequestParam("page") Integer page, @RequestParam("limit") Integer limit);
+
+  @GetMapping("/user-profiles/search-by-firstname-and-lastname")
+  ResponseEntity<List<ProfileResponseDto>> getUserProfilesByFirstNameAndLastName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName);
 
   @GetMapping("/user-profile/{userId}")
   ResponseEntity<ProfileResponseDto> getUserProfile(@PathVariable("userId") Integer userId);

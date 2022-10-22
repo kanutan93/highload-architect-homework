@@ -12,6 +12,8 @@ public interface UserRepository {
 
   List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit);
 
+  List<UserDao> searchUsers(String firstName, String lastName);
+
   UserDao getById(Integer id);
 
   UserDao getByEmail(String email);

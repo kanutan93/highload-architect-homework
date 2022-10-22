@@ -49,6 +49,16 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  public List<UserDao> searchUsers(String firstName, String lastName) {
+    firstName = firstName + "%";
+    lastName = lastName + "%";
+    return jdbcTemplate.query("SELECT * FROM users " +
+            "WHERE first_name LIKE ? AND last_name LIKE ? " +
+            "ORDER BY id",
+        new UserDaoRowMapper(), firstName, lastName);
+  }
+
+  @Override
   public UserDao getById(Integer id) {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM users " +
