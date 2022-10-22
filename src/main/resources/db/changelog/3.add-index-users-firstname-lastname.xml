@@ -5,11 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="2.insert-to-users" author="Dmitry Morozov">
-        <comment>Insert users</comment>
-        <sqlFile path="insert-users.sql" relativeToChangelogFile="true"/>
+    <changeSet id="3.add-index-users-firstname-lastname" author="Dmitry Morozov">
+        <comment>Create fisrtname_lastname_idx index</comment>
+        <sql>
+            CREATE INDEX fisrtname_lastname_idx
+                ON users (first_name, last_name);
+        </sql>
         <rollback>
-            DELETE FROM users;
+            ALTER TABLE users
+            DROP INDEX fisrtname_lastname_idx;
         </rollback>
     </changeSet>
 
