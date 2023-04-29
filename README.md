@@ -19,3 +19,6 @@ mvn clean install
 
 java -jar target/social-network-0.0.1-SNAPSHOT.jar
 ```
+
+### Тестирование API:
+Для ручного тестирования API необходимо импортировать social-network-morozov.postman_collection.json в Postman 
