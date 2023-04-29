@@ -16,6 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <testcontainers.version>1.17.4</testcontainers.version>
+        <openapi.generator.maven.plugin.version>6.5.0</openapi.generator.maven.plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -39,6 +40,22 @@
             <artifactId>mapstruct</artifactId>
             <version>1.4.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>${openapi.generator.maven.plugin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.9</version>
+        </dependency>
+
 
         <dependency>
             <groupId>mysql</groupId>
@@ -113,6 +130,29 @@
                         <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi.generator.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/openapi.json</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-cloud</library>
+                            <apiPackage>ru.hl.socialnetwork.api</apiPackage>
+                            <modelPackage>ru.hl.socialnetwork.dto</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
