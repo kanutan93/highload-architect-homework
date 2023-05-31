@@ -5,16 +5,14 @@ services:
     build: ./
     restart: always
     environment:
-      DB_URL: 'jdbc:postgresql://db:5432/social_network'
+      DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
       DB_USER: 'social_network_user'
       DB_PASSWORD: 'password'
     ports:
       - "8080:8080"
-    depends_on:
-      - db
 
-  db:
-    container_name: db
+  db-master:
+    container_name:  db-master
     image: postgres
     restart: always
     environment:
@@ -22,9 +20,32 @@ services:
       POSTGRES_USER: 'social_network_user'
       POSTGRES_PASSWORD: 'password'
     volumes:
-      - hl-homework-db:/var/lib/postgresql/data
+      - ./docker/postgres/db-master:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-volumes:
-  hl-homework-db:
+  db-slave1:
+    container_name: db-slave1
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'social_network'
+      POSTGRES_USER: 'social_network_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-slave1:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  db-slave2:
+    container_name: db-slave2
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'social_network'
+      POSTGRES_USER: 'social_network_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-slave2:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
