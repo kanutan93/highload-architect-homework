@@ -21,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   public void save(UserDao userDao) {
     jdbcTemplate.update("INSERT INTO users (email, password, first_name, last_name, age, sex, about_info, city) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "VALUES (?, ?, ?, ?, ?, ?::SexType, ?, ?)",
         userDao.getEmail(), userDao.getPassword(), userDao.getFirstName(),
         userDao.getLastName(), userDao.getAge(), userDao.getSex().getValue(),
         userDao.getAboutInfo(), userDao.getCity());
@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   public void update(Integer id, UserDao userDao) {
     jdbcTemplate.update("UPDATE users " +
-            "SET first_name = ?,last_name = ?,age = ?,sex = ?,about_info = ?,city = ? " +
+            "SET first_name = ?,last_name = ?,age = ?,sex = ?::SexType,about_info = ?,city = ? " +
             "WHERE id = ? ",
         userDao.getFirstName(),
         userDao.getLastName(), userDao.getAge(), userDao.getSex().getValue(),

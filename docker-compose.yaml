@@ -5,9 +5,9 @@ services:
     build: ./
     restart: always
     environment:
-      MYSQL_URL: 'jdbc:mysql://db:3306/social_network'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'password'
+      DB_URL: 'jdbc:postgresql://db:5432/social_network'
+      DB_USER: 'social_network_user'
+      DB_PASSWORD: 'password'
     ports:
       - "8080:8080"
     depends_on:
@@ -15,15 +15,16 @@ services:
 
   db:
     container_name: db
-    image: mysql:latest
+    image: postgres
     restart: always
     environment:
-      MYSQL_DATABASE: 'social_network'
-      MYSQL_ROOT_PASSWORD: 'password'
+      POSTGRES_DB: 'social_network'
+      POSTGRES_USER: 'social_network_user'
+      POSTGRES_PASSWORD: 'password'
     volumes:
-      - hl-homework-db:/var/lib/mysql
+      - hl-homework-db:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
+      - "5432:5432"
 
 volumes:
   hl-homework-db:
