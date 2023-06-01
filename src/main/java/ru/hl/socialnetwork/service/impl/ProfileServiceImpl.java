@@ -76,6 +76,7 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
+  @ReadOnlyConnection
   @Transactional(readOnly = true)
   public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
@@ -93,6 +94,7 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
+  @ReadOnlyConnection
   @Transactional(readOnly = true)
   public List<ProfileResponseDto> getUserProfiles(String firstName, String lastName) {
     log.info("Trying to search user profiles by firstName: {}, lastName: {}", firstName, lastName);
@@ -109,6 +111,7 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
+  @ReadOnlyConnection
   @Transactional(readOnly = true)
   public ProfileResponseDto getUserProfile(Integer userId) {
     log.info("Trying to get user profile with id: {}", userId);
