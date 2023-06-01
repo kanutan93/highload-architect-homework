@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextH
 
 @Aspect
 @Component
+@ConditionalOnProperty(value = "spring.slave.datasource.readonly-slave-enabled", havingValue = "true")
 public class ReadOnlyConnectionInterceptor implements Ordered {
 
   private int order;
