@@ -8,7 +8,7 @@ services:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
       MASTER_DB_USER: 'social_network_user'
       MASTER_DB_PASSWORD: 'password'
-      SLAVE_DB_URL: 'jdbc:postgresql://db-master:5433/social_network'
+      SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
       SLAVE_DB_USER: 'social_network_user'
       SLAVE_DB_PASSWORD: 'password'
     ports:
