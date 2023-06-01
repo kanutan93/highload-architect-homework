@@ -46,7 +46,7 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   @ReadOnlyConnection
-  @Transactional
+  @Transactional(readOnly = true)
   public ProfileResponseDto getCurrentProfile() {
     log.info("Trying to get current user profile");
 
