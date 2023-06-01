@@ -1,6 +1,7 @@
 package ru.hl.socialnetwork.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,9 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String USERS_QUERY = "SELECT email AS username, password, true AS enabled FROM users WHERE email = ?";
   private static final String AUTHORITY_QUERY = "SELECT email AS username, 'USER_ROLE' AS authority FROM users WHERE email = ?";
 
-  @Autowired
-  private DataSource dataSource;
-
   @Bean
   public static BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -28,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   @Bean
-  public UserDetailsService jdbcUserDetailsService(DataSource dataSource) {
+  public UserDetailsService jdbcUserDetailsService(@Qualifier("slaveDataSource") DataSource dataSource) {
     JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
 
     users.setUsersByUsernameQuery(USERS_QUERY);

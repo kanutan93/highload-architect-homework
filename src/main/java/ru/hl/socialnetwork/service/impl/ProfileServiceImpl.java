@@ -6,7 +6,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hl.socialnetwork.aop.ReadOnlyConnection;
 import ru.hl.socialnetwork.model.dao.UserDao;
 import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.request.UpdateProfileRequestDto;
@@ -43,7 +45,8 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @ReadOnlyConnection
+  @Transactional
   public ProfileResponseDto getCurrentProfile() {
     log.info("Trying to get current user profile");
 
