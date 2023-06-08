@@ -11,6 +11,9 @@ services:
       SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
       SLAVE_DB_USER: 'social_network_user'
       SLAVE_DB_PASSWORD: 'password'
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
+      REDIS_PASSWORD: 'password'
     ports:
       - "8080:8080"
 
@@ -52,3 +55,12 @@ services:
       - ./docker/postgres/db-slave2:/var/lib/postgresql/data
     ports:
       - "5434:5432"
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    environment:
+      REDIS_PASSWORD: 'password'
+    ports:
+      - "6379:6379"

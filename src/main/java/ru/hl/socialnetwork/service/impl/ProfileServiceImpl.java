@@ -2,6 +2,9 @@ package ru.hl.socialnetwork.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +34,7 @@ public class ProfileServiceImpl implements ProfileService {
 
   @Override
   @Transactional
+  @CacheEvict(value = "users", allEntries = true)
   public void register(RegisterProfileRequestDto registerProfileRequestDto) {
     log.info("Trying to register user with email: {}", registerProfileRequestDto.getEmail());
 
@@ -60,6 +64,8 @@ public class ProfileServiceImpl implements ProfileService {
   }
 
   @Override
+  @Transactional
+  @CacheEvict(value = "users", allEntries = true)
   public ProfileResponseDto updateCurrentProfile(UpdateProfileRequestDto updateProfileRequestDto) {
     log.info("Trying to update current user profile");
 
@@ -78,6 +84,7 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
+  @Cacheable(value = "users", key = "#search + #page + #limit")
   public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
 
@@ -96,6 +103,7 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
+  @Cacheable(value = "users", key = "#firstName + #lastName")
   public List<ProfileResponseDto> getUserProfiles(String firstName, String lastName) {
     log.info("Trying to search user profiles by firstName: {}, lastName: {}", firstName, lastName);
 
@@ -113,6 +121,7 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
+  @Cacheable(value = "users", key = "#userId")
   public ProfileResponseDto getUserProfile(Integer userId) {
     log.info("Trying to get user profile with id: {}", userId);
 

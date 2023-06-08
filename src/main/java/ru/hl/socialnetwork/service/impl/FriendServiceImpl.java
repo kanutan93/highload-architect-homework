@@ -27,6 +27,7 @@ public class FriendServiceImpl implements FriendService {
   private final FriendMapper friendMapper;
 
   @Override
+  @Transactional(readOnly = true)
   public List<FriendRequestsResponseDto> getFriendsRequest() {
     User currentUser = getCurrentUser();
     log.info("Trying to get friends requests for current user: {}", currentUser.getUsername());
