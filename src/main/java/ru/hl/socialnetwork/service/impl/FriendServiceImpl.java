@@ -12,9 +12,12 @@ import ru.hl.socialnetwork.model.dto.response.FriendRequestsResponseDto;
 import ru.hl.socialnetwork.repository.FriendRepository;
 import ru.hl.socialnetwork.repository.UserRepository;
 import ru.hl.socialnetwork.service.FriendService;
+import ru.hl.socialnetwork.util.CurrentUserUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.hl.socialnetwork.util.CurrentUserUtil.getCurrentUser;
 
 @Slf4j
 @Service
@@ -85,9 +88,5 @@ public class FriendServiceImpl implements FriendService {
     friendRepository.remove(currentUserId, id);
 
     log.info("User profile with id: {} was removed from friends for current user: {}", id, currentUser.getUsername());
-  }
-
-  private static User getCurrentUser() {
-    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }
