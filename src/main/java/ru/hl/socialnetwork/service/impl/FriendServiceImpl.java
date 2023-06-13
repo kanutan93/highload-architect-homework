@@ -48,6 +48,22 @@ public class FriendServiceImpl implements FriendService {
   }
 
   @Override
+  public List<FriendRequestsResponseDto> getAllFriends() {
+    User currentUser = getCurrentUser();
+    log.info("Trying to get all friends for current user: {}", currentUser.getUsername());
+
+    int currentUserId = userRepository.getByEmail(currentUser.getUsername()).getId();
+    List<FriendRequestsResponseDto> result = friendRepository.getAllFriends(currentUserId)
+        .stream()
+        .map(friendMapper::toFriendRequestResponseDto)
+        .collect(Collectors.toList());
+
+    log.info("{} friends were received for current user: {}", result.size(), currentUser.getUsername());
+
+    return result;
+  }
+
+  @Override
   @Transactional
   public void addUserProfileToFriends(Integer id) {
     User currentUser = getCurrentUser();

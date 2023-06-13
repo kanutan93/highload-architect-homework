@@ -8,7 +8,9 @@ public interface PostRepository {
 
     List<PostDao> getAllPostsFromFriends(Integer userId);
 
-    void createPost(String text, Integer authorUserId);
+    PostDao getPostById(Integer id);
+
+    int createPost(String text, Integer authorUserId);
 
     void updatePost(Integer id, String text, Integer authorUserId);
 

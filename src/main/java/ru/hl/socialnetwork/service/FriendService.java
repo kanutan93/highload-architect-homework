@@ -8,6 +8,8 @@ public interface FriendService {
 
   List<FriendRequestsResponseDto> getFriendsRequest();
 
+  List<FriendRequestsResponseDto> getAllFriends();
+
   void addUserProfileToFriends(Integer userId);
 
   void removeUserProfileFromFriends(Integer userId);

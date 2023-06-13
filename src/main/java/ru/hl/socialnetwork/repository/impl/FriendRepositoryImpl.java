@@ -26,6 +26,14 @@ public class FriendRepositoryImpl implements FriendRepository {
   }
 
   @Override
+  public List<FriendDao> getAllFriends(Integer currentUserId) {
+    return jdbcTemplate.query("SELECT * FROM friends " +
+            "WHERE (sender_id = ? OR receiver_id = ?)",
+        new FriendDaoRowMapper(),
+        currentUserId, currentUserId);
+  }
+
+  @Override
   public  FriendDao get(Integer senderId, Integer receiverId) {
     return jdbcTemplate.queryForObject("SELECT * FROM friends " +
             "WHERE (sender_id = ? AND receiver_id = ?) OR (receiver_id = ? AND sender_id = ?)",

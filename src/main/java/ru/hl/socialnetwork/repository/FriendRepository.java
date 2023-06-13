@@ -8,6 +8,8 @@ public interface FriendRepository {
 
   List<FriendDao> getFriendRequests(Integer currentUserId);
 
+  List<FriendDao> getAllFriends(Integer currentUserId);
+
   FriendDao get(Integer senderId, Integer receiverId);
 
   void save(FriendDao friendDao);

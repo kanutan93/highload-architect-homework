@@ -3,11 +3,14 @@ package ru.hl.socialnetwork.repository.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.hl.socialnetwork.mapper.post.PostDaoRowMapper;
 import ru.hl.socialnetwork.model.dao.PostDao;
 import ru.hl.socialnetwork.repository.PostRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Slf4j
@@ -30,10 +33,26 @@ public class PostRepositoryImpl implements PostRepository {
   }
 
   @Override
-  public void createPost(String text, Integer authorUserId) {
-    jdbcTemplate.update("INSERT INTO posts (text, author_user_id) " +
-            "VALUES (?, ?)",
-        text, authorUserId);
+  public PostDao getPostById(Integer id) {
+    return jdbcTemplate.queryForObject("SELECT * FROM posts " +
+            "WHERE id = ?",
+        new PostDaoRowMapper(),
+        id);
+  }
+
+  @Override
+  public int createPost(String text, Integer authorUserId) {
+    GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+    jdbcTemplate.update(connection -> {
+      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO posts (text, author_user_id) " +
+              "VALUES (?, ?)",
+          Statement.RETURN_GENERATED_KEYS);
+      preparedStatement.setString(1, text);
+      preparedStatement.setInt(2, authorUserId);
+      return preparedStatement;
+    }, generatedKeyHolder);
+
+    return generatedKeyHolder.getKey().intValue();
   }
 
   @Override
