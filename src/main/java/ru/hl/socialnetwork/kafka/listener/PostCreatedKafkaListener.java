@@ -1,7 +1,6 @@
 package ru.hl.socialnetwork.kafka.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import liquibase.repackaged.org.apache.commons.collections4.CollectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -9,6 +8,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import ru.hl.socialnetwork.kafka.payload.PostPayload;
 import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 
@@ -36,7 +36,7 @@ public class PostCreatedKafkaListener {
     PostPayload postPayload = objectMapper.convertValue(payload, PostPayload.class);
 
     Integer userId = postPayload.getReceiverUserId();
-    var messagePost = postPayload.getPost();
+    var messagePost = postPayload.getPostResponseDto();
 
     log.info("New post: {} created for userId: {}", messagePost, userId);
 
@@ -44,7 +44,7 @@ public class PostCreatedKafkaListener {
     if (postsFeedCache != null) {
       List<PostResponseDto> postsFeed = postsFeedCache.get(userId, List.class);
 
-      if (CollectionUtils.isNotEmpty(postsFeed)) {
+      if (!CollectionUtils.isEmpty(postsFeed)) {
         LinkedList<PostResponseDto> updatedPostsFeed = postsFeed.stream()
             .filter(post -> !post.getAuthorUserId().equals(messagePost.getAuthorUserId()))
             .collect(Collectors.toCollection(LinkedList::new));

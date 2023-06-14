@@ -3,6 +3,6 @@ CREATE TABLE post (
     text VARCHAR NOT NULL,
     author_user_id INT NOT NULL,
 
-    CONSTRAINT fk_author_id FOREIGN KEY (author_user_id) REFERENCES user (id),
+    CONSTRAINT fk_author_id FOREIGN KEY (author_user_id) REFERENCES users (id),
     PRIMARY KEY (id)
 );

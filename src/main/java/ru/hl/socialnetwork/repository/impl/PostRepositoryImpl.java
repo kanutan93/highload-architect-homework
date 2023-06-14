@@ -22,19 +22,18 @@ public class PostRepositoryImpl implements PostRepository {
 
   @Override
   public List<PostDao> getAllPostsFromFriends(Integer userId) {
-    return jdbcTemplate.query("SELECT * FROM posts " +
+    return jdbcTemplate.query("SELECT * FROM post " +
             "WHERE author_user_id IN (SELECT receiver_id FROM friends WHERE sender_id = ? AND is_approved = true) " +
             "OR author_user_id IN (SELECT sender_id FROM friends WHERE receiver_id = ? AND is_approved = true) " +
             "AND author_user_id != ? " +
-            "ORDER BY created_at DESC " +
             "LIMIT 1000",
         new PostDaoRowMapper(),
-        userId);
+        userId, userId, userId);
   }
 
   @Override
   public PostDao getPostById(Integer id) {
-    return jdbcTemplate.queryForObject("SELECT * FROM posts " +
+    return jdbcTemplate.queryForObject("SELECT * FROM post " +
             "WHERE id = ?",
         new PostDaoRowMapper(),
         id);
@@ -44,7 +43,7 @@ public class PostRepositoryImpl implements PostRepository {
   public int createPost(String text, Integer authorUserId) {
     GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(connection -> {
-      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO posts (text, author_user_id) " +
+      PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO post (text, author_user_id) " +
               "VALUES (?, ?)",
           Statement.RETURN_GENERATED_KEYS);
       preparedStatement.setString(1, text);
@@ -52,12 +51,12 @@ public class PostRepositoryImpl implements PostRepository {
       return preparedStatement;
     }, generatedKeyHolder);
 
-    return generatedKeyHolder.getKey().intValue();
+    return (int) generatedKeyHolder.getKeys().get("id");
   }
 
   @Override
   public void updatePost(Integer id, String text, Integer authorUserId) {
-    jdbcTemplate.update("UPDATE posts " +
+    jdbcTemplate.update("UPDATE post " +
             "SET text = ? " +
             "WHERE id = ? AND author_user_id = ?",
         text, id, authorUserId);
@@ -65,7 +64,7 @@ public class PostRepositoryImpl implements PostRepository {
 
   @Override
   public void deletePost(Integer id) {
-    jdbcTemplate.update("DELETE FROM posts " +
+    jdbcTemplate.update("DELETE FROM post " +
             "WHERE id = ?",
         id);
   }

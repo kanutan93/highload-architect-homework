@@ -8,9 +8,9 @@ public interface PostService {
 
     List<PostResponseDto> getPostsFeed();
 
-    void createPost(String text, Integer authorUserId);
+    void createPost(String text);
 
-    void updatePost(Integer id, String text, Integer authorUserId);
+    void updatePost(Integer id, String text);
 
     void deletePost(Integer id);
 }

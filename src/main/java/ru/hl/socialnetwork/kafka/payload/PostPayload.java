@@ -7,8 +7,8 @@ import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 public class PostPayload {
 
   private Integer receiverUserId;
-  Action action;
-  private PostResponseDto post;
+  private Action action;
+  private PostResponseDto postResponseDto;
 
   public enum Action {
     CREATE,

@@ -22,14 +22,14 @@ public class PostControllerImpl implements PostController {
   }
 
   @Override
-  public ResponseEntity<Void> createPost(String text, Integer authorUserId) {
-    postService.createPost(text, authorUserId);
+  public ResponseEntity<Void> createPost(String text) {
+    postService.createPost(text);
     return ResponseEntity.ok().build();
   }
 
   @Override
-  public ResponseEntity<Void> updatePost(Integer id, String text, Integer authorUserId) {
-    postService.updatePost(id, text, authorUserId);
+  public ResponseEntity<Void> updatePost(Integer id, String text) {
+    postService.updatePost(id, text);
     return ResponseEntity.ok().build();
   }
 

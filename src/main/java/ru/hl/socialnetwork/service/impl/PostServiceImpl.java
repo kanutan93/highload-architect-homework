@@ -72,28 +72,30 @@ public class PostServiceImpl implements PostService {
   @Override
   @SneakyThrows
   @Transactional
-  public void createPost(String text, Integer authorUserId) {
-    log.info("Trying to create post by user with id = {} and text = {}", authorUserId, text);
+  public void createPost(String text) {
+    Integer currentUserId = profileService.getCurrentProfile().getId();
+    log.info("Trying to create post by user with id = {} and text = {}", currentUserId, text);
 
-    int id = postRepository.createPost(text, authorUserId);
+    int id = postRepository.createPost(text, currentUserId);
     PostResponseDto post = postMapper.toPostResponseDto(postRepository.getPostById(id));
 
     sendPostToFriends(CREATE, post);
 
-    log.info("Post by user with id = {} and text = {} was successfully created", authorUserId, text);
+    log.info("Post by user with id = {} and text = {} was successfully created", currentUserId, text);
   }
 
   @Override
   @Transactional
-  public void updatePost(Integer id, String text, Integer authorUserId) {
-    log.info("Trying to update post with id = {} by user with id = {} and text = {}", id, authorUserId, text);
+  public void updatePost(Integer id, String text) {
+    Integer currentUserId = profileService.getCurrentProfile().getId();
+    log.info("Trying to update post with id = {} by user with id = {} and text = {}", id, currentUserId, text);
 
-    postRepository.updatePost(id, text, authorUserId);
+    postRepository.updatePost(id, text, currentUserId);
     PostResponseDto post = postMapper.toPostResponseDto(postRepository.getPostById(id));
 
     sendPostToFriends(UPDATE, post);
 
-    log.info("Post with id = {} by user with id = {} and text = {} was successfully updated", id, authorUserId, text);
+    log.info("Post with id = {} by user with id = {} and text = {} was successfully updated", id, currentUserId, text);
   }
 
   @Override
