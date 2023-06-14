@@ -18,7 +18,7 @@ public class PostControllerImpl implements PostController {
   @Override
   public ResponseEntity<List<PostResponseDto>> getPostsFeed() {
     List<PostResponseDto> postsFeed = postService.getPostsFeed();
-    return ResponseEntity.ok(null);
+    return ResponseEntity.ok(postsFeed);
   }
 
   @Override
