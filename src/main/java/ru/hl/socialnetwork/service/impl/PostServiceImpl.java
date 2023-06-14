@@ -35,7 +35,7 @@ public class PostServiceImpl implements PostService {
   private static final String POSTS_FEED_CACHE = "postsFeedCache";
   private final PostRepository postRepository;
   private final PostMapper postMapper;
-  private final KafkaTemplate kafkaTemplate;
+  private final KafkaTemplate<String, String> kafkaTemplate;
   private final ObjectMapper objectMapper;
   private final FriendService friendService;
   private final ProfileService profileService;

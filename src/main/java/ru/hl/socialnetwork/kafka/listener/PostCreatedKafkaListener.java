@@ -28,7 +28,8 @@ public class PostCreatedKafkaListener {
 
   @KafkaListener(
       topics = "${spring.kafka.template.default-topic}",
-      groupId = "${spring.kafka.consumer.group-id}"
+      groupId = "${spring.kafka.consumer.group-id}",
+      containerFactory = "kafkaListenerContainerFactory"
   )
   public void listen(@Payload String payload) {
     log.info("New message received: {}", payload);
