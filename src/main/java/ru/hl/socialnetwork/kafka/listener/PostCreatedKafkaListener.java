@@ -16,12 +16,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.util.CollectionUtils.isEmpty;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class PostCreatedKafkaListener {
+
+  private static final String POSTS_FEED_CACHE = "postsFeedCache";
 
   private final CacheManager cacheManager;
   private final ObjectMapper objectMapper;
@@ -33,14 +33,14 @@ public class PostCreatedKafkaListener {
   public void listen(@Payload String payload) {
     log.info("New message received: {}", payload);
 
-    PostPayload postCreatedMessage = objectMapper.convertValue(payload, PostPayload.class);
+    PostPayload postPayload = objectMapper.convertValue(payload, PostPayload.class);
 
-    Integer userId = postCreatedMessage.getUserId();
-    PostResponseDto messagePost = postCreatedMessage.getPostResponseDto();
+    Integer userId = postPayload.getReceiverUserId();
+    var messagePost = postPayload.getPost();
 
     log.info("New post: {} created for userId: {}", messagePost, userId);
 
-    Cache postsFeedCache = cacheManager.getCache("postsFeedCache");
+    Cache postsFeedCache = cacheManager.getCache(POSTS_FEED_CACHE);
     if (postsFeedCache != null) {
       List<PostResponseDto> postsFeed = postsFeedCache.get(userId, List.class);
 
@@ -54,7 +54,6 @@ public class PostCreatedKafkaListener {
       } else {
         log.info("Posts feed cache for userId: {} is empty", userId);
       }
-
     }
   }
 }

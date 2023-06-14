@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hl.socialnetwork.controller.PostController;
 import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 import ru.hl.socialnetwork.service.PostService;
-import ru.hl.socialnetwork.util.CurrentUserUtil;
 
 import java.util.List;
 
@@ -18,9 +17,7 @@ public class PostControllerImpl implements PostController {
 
   @Override
   public ResponseEntity<List<PostResponseDto>> getPostsFeed() {
-    //TODO: get current user from security context
-    var currentUser = CurrentUserUtil.getCurrentUser().getUsername();
-//    List<PostResponseDto> postsFeed = postService.getPostsFeed(currentUser);
+    List<PostResponseDto> postsFeed = postService.getPostsFeed();
     return ResponseEntity.ok(null);
   }
 

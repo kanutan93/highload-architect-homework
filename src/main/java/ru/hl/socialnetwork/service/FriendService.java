@@ -8,7 +8,7 @@ public interface FriendService {
 
   List<FriendRequestsResponseDto> getFriendsRequest();
 
-  List<FriendRequestsResponseDto> getAllFriends();
+  List<Integer> getAllFriendsIds();
 
   void addUserProfileToFriends(Integer userId);
 

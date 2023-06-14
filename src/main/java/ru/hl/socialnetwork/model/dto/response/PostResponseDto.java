@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PostResponseDto {
-    private Long id;
+    private Integer id;
     private String text;
-    private Long authorUserId;
+    private Integer authorUserId;
 }

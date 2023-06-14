@@ -3,6 +3,8 @@ package ru.hl.socialnetwork.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import ru.hl.socialnetwork.repository.UserRepository;
 import ru.hl.socialnetwork.service.ProfileService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,13 +31,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
+  private static final String CURRENT_PROFILE_CACHE = "currentProfileCache";
+
   private final UserRepository userRepository;
   private final UserDaoMapper userDaoMapper;
   private final BCryptPasswordEncoder passwordEncoder;
+  private final CacheManager cacheManager;
 
   @Override
   @Transactional
-  @CacheEvict(value = "users", allEntries = true)
   public void register(RegisterProfileRequestDto registerProfileRequestDto) {
     log.info("Trying to register user with email: {}", registerProfileRequestDto.getEmail());
 
@@ -55,26 +60,43 @@ public class ProfileServiceImpl implements ProfileService {
     log.info("Trying to get current user profile");
 
     User currentUser = getCurrentUser();
-    UserDao currentUserDao = userRepository.getByEmail(currentUser.getUsername());
-    ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
+    String username = currentUser.getUsername();
 
-    log.info("Current user profile with email: {} has been received successfully", result.getEmail());
+    Cache cache = cacheManager.getCache(CURRENT_PROFILE_CACHE);
+    ProfileResponseDto currentProfileFromCache = Optional.ofNullable(cache)
+        .map(it -> it.get(username, ProfileResponseDto.class))
+        .orElse(null);
 
-    return result;
+    if (currentProfileFromCache != null) {
+      log.info("Current user profile with email: {} has been received successfully from cache", currentProfileFromCache.getEmail());
+      return currentProfileFromCache;
+    } else {
+      UserDao currentUserDao = userRepository.getByEmail(username);
+      ProfileResponseDto currentProfile = userDaoMapper.toProfileResponseDto(currentUserDao);
+      cache.put(username, currentProfile);
+      log.info("Current user profile with email: {} has been received successfully", currentProfile.getEmail());
+      return currentProfile;
+    }
   }
 
   @Override
   @Transactional
-  @CacheEvict(value = "users", allEntries = true)
   public ProfileResponseDto updateCurrentProfile(UpdateProfileRequestDto updateProfileRequestDto) {
     log.info("Trying to update current user profile");
 
     User currentUser = getCurrentUser();
-    UserDao currentUserDao = userRepository.getByEmail(currentUser.getUsername());
+    String username = currentUser.getUsername();
+
+    UserDao currentUserDao = userRepository.getByEmail(username);
     UserDao userDao = userDaoMapper.toUserDao(updateProfileRequestDto);
     userRepository.update(currentUserDao.getId(), userDao);
     currentUserDao = userRepository.getByEmail(currentUser.getUsername());
     ProfileResponseDto result = userDaoMapper.toProfileResponseDto(currentUserDao);
+
+    Cache cache = cacheManager.getCache(CURRENT_PROFILE_CACHE);
+    if (cache != null) {
+      cache.put(username, result);
+    }
 
     log.info("Current user profile with email: {} has been updated successfully", result.getEmail());
 
@@ -84,7 +106,6 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
-  @Cacheable(value = "users", key = "#search + #page + #limit")
   public List<ProfileResponseDto> getUserProfiles(String search, Integer page, Integer limit) {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
 
@@ -103,7 +124,6 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
-  @Cacheable(value = "users", key = "#firstName + #lastName")
   public List<ProfileResponseDto> getUserProfiles(String firstName, String lastName) {
     log.info("Trying to search user profiles by firstName: {}, lastName: {}", firstName, lastName);
 
@@ -121,7 +141,6 @@ public class ProfileServiceImpl implements ProfileService {
   @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
-  @Cacheable(value = "users", key = "#userId")
   public ProfileResponseDto getUserProfile(Integer userId) {
     log.info("Trying to get user profile with id: {}", userId);
 

@@ -1,13 +1,18 @@
 package ru.hl.socialnetwork.kafka.payload;
 
 import lombok.Data;
+import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 
 @Data
 public class PostPayload {
 
-  private Integer userId;
+  private Integer receiverUserId;
+  Action action;
+  private PostResponseDto post;
 
-  private Long id;
-  private String text;
-  private Long authorUserId;
+  public enum Action {
+    CREATE,
+    UPDATE,
+    DELETE
+  }
 }

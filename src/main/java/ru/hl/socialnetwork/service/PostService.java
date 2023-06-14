@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PostService {
 
-    List<PostResponseDto> getPostsFeed(Integer currentUserId);
+    List<PostResponseDto> getPostsFeed();
 
     void createPost(String text, Integer authorUserId);
 
