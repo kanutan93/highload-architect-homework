@@ -2,7 +2,9 @@ package ru.hl.socialnetwork.kafka.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,15 +28,13 @@ public class PostCreatedKafkaListener {
   private final CacheManager cacheManager;
   private final ObjectMapper objectMapper;
 
-  @KafkaListener(
-      topics = "${spring.kafka.template.default-topic}",
-      groupId = "${spring.kafka.consumer.group-id}",
-      containerFactory = "kafkaListenerContainerFactory"
-  )
-  public void listen(@Payload String payload) {
+  @KafkaListener(topics = "${kafka.topic}")
+  @SneakyThrows
+  public void consume(ConsumerRecord<String, String> record) {
+    String payload = record.value();
     log.info("New message received: {}", payload);
 
-    PostPayload postPayload = objectMapper.convertValue(payload, PostPayload.class);
+    PostPayload postPayload = objectMapper.readValue(payload, PostPayload.class);
 
     Integer userId = postPayload.getReceiverUserId();
     var messagePost = postPayload.getPostResponseDto();
