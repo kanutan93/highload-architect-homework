@@ -2,7 +2,7 @@ version: '3.5'
 services:
   backend:
     container_name: backend
-    image: kanutan93/hl-homework:1.0.4
+    image: kanutan93/hl-homework:1.0.5
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -73,7 +73,7 @@ services:
     image: confluentinc/cp-kafka:latest
     restart: always
     environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka:9092,PLAINTEXT_INTERNAL://hl-kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_ZOOKEEPER_CONNECT: hl-zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
