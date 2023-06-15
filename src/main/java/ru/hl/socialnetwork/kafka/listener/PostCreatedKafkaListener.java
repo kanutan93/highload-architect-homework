@@ -16,6 +16,7 @@ import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.hl.socialnetwork.kafka.payload.PostPayload.*;
@@ -44,9 +45,10 @@ public class PostCreatedKafkaListener {
 
     Cache postsFeedCache = cacheManager.getCache(POSTS_FEED_CACHE);
     if (postsFeedCache != null) {
-      LinkedList<PostResponseDto> postsFeed = postsFeedCache.get(userId, LinkedList.class);
+      List postsFeedCacheValue = postsFeedCache.get(userId, List.class);
 
-      if (postsFeed != null) {
+      if (postsFeedCacheValue != null) {
+        LinkedList<PostResponseDto> postsFeed = new LinkedList<>(postsFeedCacheValue);
         switch (action) {
             case CREATE:
                 postsFeed.addFirst(messagePost);
