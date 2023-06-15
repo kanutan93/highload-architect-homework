@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.hl.socialnetwork.model.dto.request.post.CreatePostRequestDto;
+import ru.hl.socialnetwork.model.dto.request.post.UpdatePostRequestDto;
 import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 
 import java.util.List;
@@ -19,10 +22,10 @@ public interface PostController {
 
 
   @PostMapping("/create")
-  ResponseEntity<Void> createPost(@RequestBody String text);
+  ResponseEntity<Void> createPost(@RequestBody CreatePostRequestDto createPostRequestDto);
 
-  @PostMapping("/update/{id}")
-  ResponseEntity<Void> updatePost(Integer id, String text);
+  @PutMapping("/update")
+  ResponseEntity<Void> updatePost(@RequestBody UpdatePostRequestDto updatePostRequestDto);
 
   @DeleteMapping("/delete/{id}")
   ResponseEntity<Void> deletePost(@PathVariable Integer id);

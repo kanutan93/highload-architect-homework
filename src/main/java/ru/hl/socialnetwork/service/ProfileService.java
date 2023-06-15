@@ -1,7 +1,7 @@
 package ru.hl.socialnetwork.service;
 
-import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
-import ru.hl.socialnetwork.model.dto.request.UpdateProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.request.profile.RegisterProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.request.profile.UpdateProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 
 import java.util.List;

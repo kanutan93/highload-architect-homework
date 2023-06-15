@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hl.socialnetwork.controller.PostController;
+import ru.hl.socialnetwork.model.dto.request.post.CreatePostRequestDto;
+import ru.hl.socialnetwork.model.dto.request.post.UpdatePostRequestDto;
 import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
 import ru.hl.socialnetwork.service.PostService;
 
@@ -22,13 +24,15 @@ public class PostControllerImpl implements PostController {
   }
 
   @Override
-  public ResponseEntity<Void> createPost(String text) {
-    postService.createPost(text);
+  public ResponseEntity<Void> createPost(CreatePostRequestDto createPostRequestDto) {
+    postService.createPost(createPostRequestDto.getText());
     return ResponseEntity.ok().build();
   }
 
   @Override
-  public ResponseEntity<Void> updatePost(Integer id, String text) {
+  public ResponseEntity<Void> updatePost(UpdatePostRequestDto updatePostRequestDto) {
+    Integer id = updatePostRequestDto.getId();
+    String text = updatePostRequestDto.getText();
     postService.updatePost(id, text);
     return ResponseEntity.ok().build();
   }

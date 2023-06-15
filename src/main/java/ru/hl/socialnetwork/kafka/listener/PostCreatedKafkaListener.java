@@ -18,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.hl.socialnetwork.kafka.payload.PostPayload.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -37,20 +39,31 @@ public class PostCreatedKafkaListener {
     PostPayload postPayload = objectMapper.readValue(payload, PostPayload.class);
 
     Integer userId = postPayload.getReceiverUserId();
-    var messagePost = postPayload.getPostResponseDto();
-
-    log.info("New post: {} created for userId: {}", messagePost, userId);
+    Action action = postPayload.getAction();
+    PostResponseDto messagePost = postPayload.getPostResponseDto();
 
     Cache postsFeedCache = cacheManager.getCache(POSTS_FEED_CACHE);
     if (postsFeedCache != null) {
-      List<PostResponseDto> postsFeed = postsFeedCache.get(userId, List.class);
+      LinkedList<PostResponseDto> postsFeed = postsFeedCache.get(userId, LinkedList.class);
 
-      if (!CollectionUtils.isEmpty(postsFeed)) {
-        LinkedList<PostResponseDto> updatedPostsFeed = postsFeed.stream()
-            .filter(post -> !post.getAuthorUserId().equals(messagePost.getAuthorUserId()))
-            .collect(Collectors.toCollection(LinkedList::new));
-        updatedPostsFeed.addFirst(messagePost);
-        postsFeedCache.put(userId, updatedPostsFeed);
+      if (postsFeed != null) {
+        switch (action) {
+            case CREATE:
+                postsFeed.addFirst(messagePost);
+                break;
+            case UPDATE:
+                postsFeed = postsFeed.stream()
+                    .filter(post -> !post.getId().equals(messagePost.getId()))
+                    .collect(Collectors.toCollection(LinkedList::new));
+                postsFeed.addFirst(messagePost);
+                break;
+            case DELETE:
+                postsFeed = postsFeed.stream()
+                    .filter(post -> !post.getId().equals(messagePost.getId()))
+                    .collect(Collectors.toCollection(LinkedList::new));
+                break;
+        }
+        postsFeedCache.put(userId, postsFeed);
         log.info("Posts feed cache for userId: {} was updated", userId);
       } else {
         log.info("Posts feed cache for userId: {} is empty", userId);

@@ -1,4 +1,4 @@
-package ru.hl.socialnetwork.model.dto.request;
+package ru.hl.socialnetwork.model.dto.request.profile;
 
 import lombok.Data;
 import ru.hl.socialnetwork.model.enums.SexEnum;

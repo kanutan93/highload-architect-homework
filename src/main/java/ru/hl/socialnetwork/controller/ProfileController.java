@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.hl.socialnetwork.model.dto.request.UpdateProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.request.profile.UpdateProfileRequestDto;
 import ru.hl.socialnetwork.model.dto.response.ProfileResponseDto;
 
 import java.util.List;

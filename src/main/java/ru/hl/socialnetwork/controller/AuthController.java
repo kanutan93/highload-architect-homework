@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.hl.socialnetwork.model.dto.request.RegisterProfileRequestDto;
+import ru.hl.socialnetwork.model.dto.request.profile.RegisterProfileRequestDto;
 
 @RequestMapping("/api/auth")
 public interface AuthController {
