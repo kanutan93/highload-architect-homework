@@ -2,7 +2,7 @@ version: '3.5'
 services:
   backend:
     container_name: backend
-    image: kanutan93/hl-homework:1.0.5
+    image: kanutan93/hl-homework:1.0.14
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
