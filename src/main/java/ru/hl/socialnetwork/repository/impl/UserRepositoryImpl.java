@@ -41,11 +41,13 @@ public class UserRepositoryImpl implements UserRepository {
   public List<UserDao> search(Integer currentUserId, String search, Integer page, Integer limit) {
     search = "%" + search + "%";
 
-    return jdbcTemplate.query("SELECT * FROM users " +
-            "WHERE id <> ? AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?) " +
+    return jdbcTemplate.query("SELECT * FROM users as u " +
+            "LEFT JOIN (SELECT * FROM friends WHERE friends.sender_id = ? OR friends.receiver_id = ?) as f " +
+            "ON (u.id = f.sender_id OR u.id = f.receiver_id) " +
+            "WHERE u.id <> ? AND (u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?) " +
             "LIMIT ? OFFSET ? ",
-        new UserDaoRowMapper(),
-        currentUserId, search, search, search, limit, page * limit);
+        new UserDaoRowMapperWithApproved(),
+        currentUserId, currentUserId, currentUserId, search, search, search, limit, page * limit);
   }
 
   @Override
