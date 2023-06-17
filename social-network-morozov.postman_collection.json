@@ -7,32 +7,683 @@
 	},
 	"item": [
 		{
-			"name": "Register new profile",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"test@mail.com\",\r\n    \"password\" : \"password\",\r\n    \"firstName\": \"firstName\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "dialog",
+			"item": [
+				{
+					"name": "Get dialog",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hl_host}}/api/dialog/7600/list",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"dialog",
+								"7600",
+								"list"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{hl_host}}/api/auth/register",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"auth",
-						"register"
-					]
+				{
+					"name": "Send message",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"privet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/dialog/7600/send",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"dialog",
+								"7600",
+								"send"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "post",
+			"item": [
+				{
+					"name": "Get post feed",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hl_host}}/api/post/feed",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"post",
+								"feed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test1@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Hello1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/post/create",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"post",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 25,\r\n    \"text\": \"Hello2Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/post/update",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"post",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete post",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 25,\r\n    \"text\": \"Hello2Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/post/delete/25",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"post",
+								"delete",
+								"25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "Register new profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@mail.com\",\r\n    \"password\" : \"password\",\r\n    \"firstName\": \"firstName\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/auth/register",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/profile/current-profile",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"current-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user profiles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/profile/user-profiles/search?search=test&limit=10&page=0",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"user-profiles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "test"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user profiles by firstname and lastname",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/profile/user-profiles/search-by-firstname-and-lastname?firstName=И&lastName=И",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"user-profiles",
+								"search-by-firstname-and-lastname"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "И"
+								},
+								{
+									"key": "lastName",
+									"value": "И"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/profile/user-profile/2",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"user-profile",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update current profile",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"firstNameNew\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/profile/current-profile",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"current-profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "friend",
+			"item": [
+				{
+					"name": "Add to friends",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test2@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/friend/7600/add-to-friends",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"friend",
+								"7600",
+								"add-to-friends"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from friends",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/friend/2/remove-from-friends",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"friend",
+								"2",
+								"remove-from-friends"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get friend request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "test@mail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"firstNameNew\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hl_host}}/api/friend/",
+							"host": [
+								"{{hl_host}}"
+							],
+							"path": [
+								"api",
+								"friend",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "HealthCheck",
@@ -62,558 +713,6 @@
 					"path": [
 						"actuator",
 						"health"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get current profile",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/profile/current-profile",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"profile",
-						"current-profile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user profiles",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/profile/user-profiles/search?search=test&limit=10&page=0",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"profile",
-						"user-profiles",
-						"search"
-					],
-					"query": [
-						{
-							"key": "search",
-							"value": "test"
-						},
-						{
-							"key": "limit",
-							"value": "10"
-						},
-						{
-							"key": "page",
-							"value": "0"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user profiles by firstname and lastname",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/profile/user-profiles/search-by-firstname-and-lastname?firstName=И&lastName=И",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"profile",
-						"user-profiles",
-						"search-by-firstname-and-lastname"
-					],
-					"query": [
-						{
-							"key": "firstName",
-							"value": "И"
-						},
-						{
-							"key": "lastName",
-							"value": "И"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user profile",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/profile/user-profile/2",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"profile",
-						"user-profile",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add to friends",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test2@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/friend/7600/add-to-friends",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"friend",
-						"7600",
-						"add-to-friends"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Remove from friends",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/friend/2/remove-from-friends",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"friend",
-						"2",
-						"remove-from-friends"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update current profile",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"firstNameNew\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/profile/current-profile",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"profile",
-						"current-profile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get friend request",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"firstNameNew\",\r\n    \"lastName\": \"lastName\",\r\n    \"age\": 15,\r\n    \"sex\": \"M\",\r\n    \"aboutInfo\": \"aboutInfo\",\r\n    \"city\": \"city\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/friend/",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"friend",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get post feed",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{hl_host}}/api/post/feed",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"post",
-						"feed"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create post",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test1@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Hello1\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/post/create",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"post",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update post",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": 25,\r\n    \"text\": \"Hello2Updated\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/post/update",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"post",
-						"update"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete post",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "test@mail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": 25,\r\n    \"text\": \"Hello2Updated\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{hl_host}}/api/post/delete/25",
-					"host": [
-						"{{hl_host}}"
-					],
-					"path": [
-						"api",
-						"post",
-						"delete",
-						"25"
 					]
 				}
 			},

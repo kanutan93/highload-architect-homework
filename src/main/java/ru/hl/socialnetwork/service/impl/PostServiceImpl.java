@@ -49,14 +49,14 @@ public class PostServiceImpl implements PostService {
   public List<PostResponseDto> getPostsFeed() {
     int currentUserId = profileService.getCurrentProfile().getId();
 
-    log.info("Trying to get posts feed for user with id = {}", currentUserId);
+    log.info("Trying to get posts feed for user with id: {}", currentUserId);
 
     Cache cache = cacheManager.getCache(POSTS_FEED_CACHE);
     List<PostResponseDto> postsFeedFromCache = Optional.ofNullable(cache)
         .map(it -> it.get(currentUserId, List.class))
         .orElse(null);
     if (postsFeedFromCache != null) {
-      log.info("Posts feed for user with id = {} was successfully received from cache", currentUserId);
+      log.info("Posts feed for user with id: {} was successfully received from cache", currentUserId);
       return postsFeedFromCache;
     } else {
       List<PostDao> allPostsFromFriends = postRepository.getAllPostsFromFriends(currentUserId);
@@ -64,7 +64,7 @@ public class PostServiceImpl implements PostService {
           .map(postMapper::toPostResponseDto)
           .collect(Collectors.toList());
       cache.put(currentUserId, postsFeed);
-      log.info("Posts feed for user with id = {} was successfully received", currentUserId);
+      log.info("Posts feed for user with id: {} was successfully received", currentUserId);
       return postsFeed;
     }
   }
@@ -74,41 +74,41 @@ public class PostServiceImpl implements PostService {
   @Transactional
   public void createPost(String text) {
     Integer currentUserId = profileService.getCurrentProfile().getId();
-    log.info("Trying to create post by user with id = {} and text = {}", currentUserId, text);
+    log.info("Trying to create post by user with id: {} and text: {}", currentUserId, text);
 
     int id = postRepository.createPost(text, currentUserId);
     PostResponseDto post = postMapper.toPostResponseDto(postRepository.getPostById(id));
 
     sendPostToFriends(CREATE, post);
 
-    log.info("Post by user with id = {} and text = {} was successfully created", currentUserId, text);
+    log.info("Post by user with id: {} and text: {} was successfully created", currentUserId, text);
   }
 
   @Override
   @Transactional
   public void updatePost(Integer id, String text) {
     Integer currentUserId = profileService.getCurrentProfile().getId();
-    log.info("Trying to update post with id = {} by user with id = {} and text = {}", id, currentUserId, text);
+    log.info("Trying to update post with id: {} by user with id: {} and text: {}", id, currentUserId, text);
 
     postRepository.updatePost(id, text, currentUserId);
     PostResponseDto post = postMapper.toPostResponseDto(postRepository.getPostById(id));
 
     sendPostToFriends(UPDATE, post);
 
-    log.info("Post with id = {} by user with id = {} and text = {} was successfully updated", id, currentUserId, text);
+    log.info("Post with id: {} by user with id: {} and text: {} was successfully updated", id, currentUserId, text);
   }
 
   @Override
   @Transactional
   public void deletePost(Integer id) {
-    log.info("Trying to delete post with id = {}", id);
+    log.info("Trying to delete post with id: {}", id);
 
     PostResponseDto post = postMapper.toPostResponseDto(postRepository.getPostById(id));
     postRepository.deletePost(id);
 
     sendPostToFriends(DELETE, post);
 
-    log.info("Post with id = {} was successfully deleted", id);
+    log.info("Post with id: {} was successfully deleted", id);
   }
 
   @SneakyThrows
