@@ -107,7 +107,9 @@ public class ProfileServiceImpl implements ProfileService {
     log.info("Trying to search user profiles by search: {}, page: {}, limit: {}", search, page, limit);
 
     User currentUser = getCurrentUser();
-    List<UserDao> usersDaos = userRepository.search(currentUser.getUsername(), search, page, limit);
+    UserDao userDao = userRepository.getByEmail(currentUser.getUsername());
+    List<UserDao> usersDaos = userRepository.search(userDao.getId(), search, page, limit);
+
 
     List<ProfileResponseDto> result = usersDaos.stream()
         .map(userDaoMapper::toProfileResponseDto)

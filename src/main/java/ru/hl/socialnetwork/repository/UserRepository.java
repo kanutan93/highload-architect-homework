@@ -10,7 +10,7 @@ public interface UserRepository {
 
   void update(Integer id, UserDao userDao);
 
-  List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit);
+  List<UserDao> search(Integer currentUserId, String search, Integer page, Integer limit);
 
   List<UserDao> searchUsers(String firstName, String lastName);
 

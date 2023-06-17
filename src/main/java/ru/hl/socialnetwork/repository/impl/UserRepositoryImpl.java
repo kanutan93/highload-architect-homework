@@ -38,14 +38,14 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<UserDao> search(String currentUserEmail, String search, Integer page, Integer limit) {
+  public List<UserDao> search(Integer currentUserId, String search, Integer page, Integer limit) {
     search = "%" + search + "%";
+
     return jdbcTemplate.query("SELECT * FROM users " +
-            "LEFT JOIN friends ON (users.id = friends.sender_id OR users.id = friends.receiver_id) " +
-            "WHERE email <> ? AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?) " +
+            "WHERE id <> ? AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?) " +
             "LIMIT ? OFFSET ? ",
-        new UserDaoRowMapperWithApproved(),
-        currentUserEmail, search, search, search, limit, page * limit);
+        new UserDaoRowMapper(),
+        currentUserId, search, search, search, limit, page * limit);
   }
 
   @Override
