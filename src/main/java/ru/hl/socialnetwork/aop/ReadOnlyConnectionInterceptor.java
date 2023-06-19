@@ -9,9 +9,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypes.SLAVE;
-import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextHolder.clearDataSourceType;
-import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextHolder.setDataSourceType;
+import static ru.hl.socialnetwork.config.PrimaryDataSourceConfig.DataSourceTypes.SLAVE;
+import static ru.hl.socialnetwork.config.PrimaryDataSourceConfig.DataSourceTypeContextHolder.clearDataSourceType;
+import static ru.hl.socialnetwork.config.PrimaryDataSourceConfig.DataSourceTypeContextHolder.setDataSourceType;
 
 @Aspect
 @Component
