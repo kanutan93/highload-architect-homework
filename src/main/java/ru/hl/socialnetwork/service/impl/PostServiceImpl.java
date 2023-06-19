@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
   private final ProfileService profileService;
   private final CacheManager cacheManager;
 
-  @Value("${kafka.topic}")
+  @Value("${spring.kafka.topic}")
   private String kafkaTopic;
 
   @Override
