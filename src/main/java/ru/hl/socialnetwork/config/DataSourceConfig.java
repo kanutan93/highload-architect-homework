@@ -2,13 +2,13 @@ package ru.hl.socialnetwork.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -19,7 +19,7 @@ import java.util.Map;
 import static ru.hl.socialnetwork.util.LiquibaseConfigUtil.getSpringLiquibase;
 
 @Configuration
-public class PrimaryDataSourceConfig {
+public class DataSourceConfig {
 
   @Bean
   @ConfigurationProperties("spring.datasource.primary.master")
@@ -27,7 +27,7 @@ public class PrimaryDataSourceConfig {
     return new DataSourceProperties();
   }
 
-  @Bean
+  @Bean(name = "masterDataSource")
   @ConfigurationProperties("spring.datasource.primary.master.configuration")
   public DataSource masterDataSource(DataSourceProperties masterDataSourceProperties) {
     return masterDataSourceProperties.initializeDataSourceBuilder()
@@ -49,13 +49,39 @@ public class PrimaryDataSourceConfig {
   }
 
   @Bean
+  @ConfigurationProperties("spring.datasource.dialog")
+  public DataSourceProperties dialogDataSourceProperties() {
+    return new DataSourceProperties();
+  }
+
+  @Bean(name = "dialogDataSource")
+  @ConfigurationProperties("spring.datasource.dialog.configuration")
+  public DataSource dialogDataSource(DataSourceProperties dialogDataSourceProperties) {
+    return dialogDataSourceProperties.initializeDataSourceBuilder()
+        .type(HikariDataSource.class)
+        .build();
+  }
+
+  @Bean
+  @ConfigurationProperties(prefix = "spring.datasource.dialog.liquibase")
+  public LiquibaseProperties dialogLiquibaseProperties() {
+    return new LiquibaseProperties();
+  }
+
+  @Bean
+  public SpringLiquibase dialogLiquibase(@Qualifier("dialogDataSource") DataSource dialogDataSource, LiquibaseProperties dialogLiquibaseProperties) {
+    return getSpringLiquibase(dialogDataSource, dialogLiquibaseProperties);
+  }
+
+  @Bean
   @Primary
-  public DataSource routingDataSource(DataSource masterDataSource, DataSource slaveDataSource) {
+  public DataSource routingDataSource(DataSource masterDataSource, DataSource slaveDataSource, DataSource dialogDataSource) {
 
     Map<Object, Object> targetDataSources = new LinkedHashMap<>();
     RoutingDataSourceConfiguration routingDataSourceConfiguration = new RoutingDataSourceConfiguration();
     targetDataSources.put(DataSourceTypes.MASTER, masterDataSource);
     targetDataSources.put(DataSourceTypes.SLAVE, slaveDataSource);
+    targetDataSources.put(DataSourceTypes.DIALOG, dialogDataSource);
     routingDataSourceConfiguration.setTargetDataSources(targetDataSources);
     routingDataSourceConfiguration.setDefaultTargetDataSource(masterDataSource);
     return routingDataSourceConfiguration;
@@ -73,20 +99,10 @@ public class PrimaryDataSourceConfig {
   }
 
   @Bean
-  public SpringLiquibase primaryLiquibase(DataSource primaryDataSource, LiquibaseProperties primaryLiquibaseProperties) {
-    return getSpringLiquibase(primaryDataSource, primaryLiquibaseProperties);
+  public SpringLiquibase masterLiquibase(@Qualifier("masterDataSource") DataSource masterDataSource, LiquibaseProperties primaryLiquibaseProperties) {
+    return getSpringLiquibase(masterDataSource, primaryLiquibaseProperties);
   }
 
-  @Primary
-  @Bean(name = "readerJdbcTemplate")
-  public NamedParameterJdbcTemplate getReaderJdbcTemplate(DataSource slaveDataSource) {
-    return new NamedParameterJdbcTemplate(slaveDataSource);
-  }
-
-  @Bean(name = "writerJdbcTemplate")
-  public NamedParameterJdbcTemplate getWriterJdbcTemplate(DataSource masterDataSource) {
-    return new NamedParameterJdbcTemplate(masterDataSource);
-  }
 
   private static class RoutingDataSourceConfiguration extends AbstractRoutingDataSource {
     @Override
@@ -96,7 +112,7 @@ public class PrimaryDataSourceConfig {
   }
 
   public enum DataSourceTypes {
-    MASTER, SLAVE
+    MASTER, SLAVE, DIALOG
   }
 
   public static class DataSourceTypeContextHolder {

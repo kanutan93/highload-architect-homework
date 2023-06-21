@@ -5,18 +5,16 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypes.SLAVE;
 import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextHolder.clearDataSourceType;
 import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextHolder.setDataSourceType;
+import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypes.DIALOG;
 
 @Aspect
 @Component
-@ConditionalOnProperty(value = "spring.slave.datasource.readonly-slave-enabled", havingValue = "true")
-public class ReadOnlyConnectionInterceptor implements Ordered {
+public class DialogConnectionInterceptor implements Ordered {
 
   private int order;
 
@@ -33,10 +31,10 @@ public class ReadOnlyConnectionInterceptor implements Ordered {
   @Pointcut(value="execution(public * *(..))")
   public void anyPublicMethod() { }
 
-  @Around("@annotation(readOnlyConnection)")
-  public Object proceed(ProceedingJoinPoint pjp, ReadOnlyConnection readOnlyConnection) throws Throwable {
+  @Around("@annotation(dialogConnection)")
+  public Object proceed(ProceedingJoinPoint pjp, DialogConnection dialogConnection) throws Throwable {
     try {
-      setDataSourceType(SLAVE);
+      setDataSourceType(DIALOG);
       Object result = pjp.proceed();
       clearDataSourceType();
       return result;

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hl.socialnetwork.aop.DialogConnection;
 import ru.hl.socialnetwork.mapper.dialog.DialogMapper;
 import ru.hl.socialnetwork.model.dao.DialogDao;
 import ru.hl.socialnetwork.model.dao.UserDao;
@@ -29,6 +30,7 @@ public class DialogServiceImpl implements DialogService {
   private final UserRepository userRepository;
 
   @Override
+  @DialogConnection
   @Transactional(readOnly = true)
   public List<DialogMessageResponseDto> getDialog(Integer userId) {
     User currentUser = getCurrentUser();
@@ -44,6 +46,7 @@ public class DialogServiceImpl implements DialogService {
   }
 
   @Override
+  @DialogConnection
   @Transactional
   public void sendMessage(Integer userId, String text) {
     User currentUser = getCurrentUser();

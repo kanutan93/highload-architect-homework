@@ -59,6 +59,19 @@ services:
     ports:
       - "5434:5432"
 
+  db-dialog:
+    container_name: db-dialog
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'social_network'
+      POSTGRES_USER: 'social_network_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-dialog:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+
   redis:
     container_name: redis
     image: redis

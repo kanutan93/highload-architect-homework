@@ -13,7 +13,7 @@ spring:
       liquibase:
         change-log: classpath:/db/changelog/primary/changelog-master.xml
     dialog:
-      url: ${DIALOG_DB_URL:jdbc:postgresql://localhost:5434/social_network}
+      url: ${DIALOG_DB_URL:jdbc:postgresql://localhost:5435/social_network}
       username: ${DIALOG_DB_USER:social_network_user}
       password: ${DIALOG_DB_PASSWORD:password}
       liquibase:
@@ -26,5 +26,6 @@ spring:
   kafka:
     topic: ${KAFKA_TOPIC:posts}
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-    group-id: ${KAFKA_CONSUMER_GROUP_ID:social_network}
-    auto-offset-reset: earliest
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:social_network}
+      auto-offset-reset: earliest
