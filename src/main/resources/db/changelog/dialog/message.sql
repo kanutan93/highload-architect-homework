@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS message
     dialog_id  INTEGER          NOT NULL,
     created_at TIMESTAMPTZ      DEFAULT NOW(),
 
-    PRIMARY KEY (id),
+    PRIMARY KEY (id, dialog_id),
     FOREIGN KEY (dialog_id) REFERENCES dialog (id)
 );
