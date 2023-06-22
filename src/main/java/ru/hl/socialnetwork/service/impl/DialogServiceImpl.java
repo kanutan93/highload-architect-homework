@@ -50,7 +50,8 @@ public class DialogServiceImpl implements DialogService {
   public List<DialogMessageResponseDto> getMessages(UserDao userDao, Integer userId) {
     log.info("Try to get dialog messages for user with id: {} and current user with id: {}", userId, userDao.getId());
 
-    var dialogMessages = dialogRepository.getMessages(userDao.getId(), userId).stream()
+    Integer dialogId = dialogRepository.getDialogId(userDao.getId(), userId);
+    var dialogMessages = dialogRepository.getMessages(dialogId).stream()
         .map(dialogMapper::toDialogMessageResponseDto)
         .collect(Collectors.toList());
     log.info("Dialog messages: {} for user with id: {} and current user with id: {} has been received successfully", dialogMessages, userId, userDao.getId());

@@ -40,13 +40,13 @@ public class DialogRepositoryImpl implements DialogRepository {
   }
 
   @Override
-  public List<MessageDao> getMessages(Integer currentUserId, Integer userId) {
+  public List<MessageDao> getMessages(Integer dialogId) {
     return jdbcTemplate.query("SELECT m.id, m.from_id, m.to_id, m.text, m.dialog_id FROM dialog AS d " +
             "JOIN message AS m ON d.id = m.dialog_id " +
-            "WHERE (d.user1_id = ? AND d.user2_id = ?) OR (d.user2_id = ? AND d.user1_id = ?) " +
+            "WHERE d.id = ? " +
             "ORDER BY m.created_at ASC",
         new MessageDaoRowMapper(),
-        currentUserId, userId, currentUserId, userId);
+        dialogId);
   }
 
   @Override

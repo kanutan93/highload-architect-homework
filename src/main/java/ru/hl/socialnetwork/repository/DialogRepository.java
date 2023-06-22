@@ -10,7 +10,7 @@ public interface DialogRepository {
 
     Integer createDialog(Integer currentUserId, Integer userId);
 
-    List<MessageDao> getMessages(Integer currentUserId, Integer userId);
+    List<MessageDao> getMessages(Integer dialogId);
 
     void createMessage(MessageDao dialogDao);
 }
