@@ -18,7 +18,7 @@ public class DialogControllerImpl implements DialogController {
 
   @Override
   public ResponseEntity<List<DialogMessageResponseDto>> getDialog(Integer userId) {
-    List<DialogMessageResponseDto> dialog = dialogService.getDialog(userId);
+    List<DialogMessageResponseDto> dialog = dialogService.getMessages(userId);
     return ResponseEntity.ok(dialog);
   }
 

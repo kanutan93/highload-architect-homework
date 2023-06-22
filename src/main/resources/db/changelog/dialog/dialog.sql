@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS dialog
 (
     id         SERIAL           NOT NULL,
-    from_id    INTEGER          NOT NULL,
-    to_id      INTEGER          NOT NULL,
-    text       TEXT             NOT NULL,
-
+    user1_id   INTEGER          NOT NULL,
+    user2_id   INTEGER          NOT NULL,
+    created_at TIMESTAMPTZ      DEFAULT NOW(),
     PRIMARY KEY (id)
 );

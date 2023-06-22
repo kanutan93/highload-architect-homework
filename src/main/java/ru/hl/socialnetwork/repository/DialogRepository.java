@@ -1,12 +1,16 @@
 package ru.hl.socialnetwork.repository;
 
-import ru.hl.socialnetwork.model.dao.DialogDao;
+import ru.hl.socialnetwork.model.dao.MessageDao;
 
 import java.util.List;
 
 public interface DialogRepository {
 
-    List<DialogDao> getDialogMessages(Integer currentUserId, Integer userId);
+    Integer getDialogId(Integer currentUserId, Integer userId);
 
-    void createDialogMessage(DialogDao dialogDao);
+    Integer createDialog(Integer currentUserId, Integer userId);
+
+    List<MessageDao> getMessages(Integer currentUserId, Integer userId);
+
+    void createMessage(MessageDao dialogDao);
 }

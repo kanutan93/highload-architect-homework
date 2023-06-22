@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface DialogService {
 
-  List<DialogMessageResponseDto> getDialog(Integer userId);
+  List<DialogMessageResponseDto> getMessages(Integer userId);
 
-  List<DialogMessageResponseDto> getDialog(UserDao userDao, Integer userId);
+  List<DialogMessageResponseDto> getMessages(UserDao userDao, Integer userId);
 
   void sendMessage(Integer userId, String text);
 

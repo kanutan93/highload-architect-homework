@@ -6,4 +6,5 @@
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
   <include file="db/changelog/dialog/0.create-table-dialog.xml"/>
+  <include file="db/changelog/dialog/1.create-table-message.xml"/>
 </databaseChangeLog>
