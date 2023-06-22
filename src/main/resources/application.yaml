@@ -14,7 +14,7 @@ spring:
         change-log: classpath:/db/changelog/primary/changelog-master.xml
     dialog:
       url: ${DIALOG_DB_URL:jdbc:postgresql://localhost:5435/postgres}
-      username: ${DIALOG_DB_USER:social_network_user}
+      username: ${DIALOG_DB_USER:postgres}
       password: ${DIALOG_DB_PASSWORD:password}
       liquibase:
         change-log: classpath:/db/changelog/dialog/changelog-master.xml

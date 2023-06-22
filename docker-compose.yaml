@@ -65,11 +65,13 @@ services:
     labels:
       - "com.citusdata.role=Master"
     environment: &AUTH
-      POSTGRES_USER: 'social_network_user'
+      POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'password'
       PGUSER: 'postgres'
       PGPASSWORD: 'pass'
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - ./docker/postgres/citus-master:/var/lib/postgresql/data
     ports:
       - "5435:5432"
   worker:
