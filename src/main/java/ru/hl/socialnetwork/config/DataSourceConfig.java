@@ -1,32 +1,34 @@
 package ru.hl.socialnetwork.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import liquibase.integration.spring.SpringLiquibase;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static ru.hl.socialnetwork.util.LiquibaseConfigUtil.getSpringLiquibase;
+
 @Configuration
-@EnableTransactionManagement
 public class DataSourceConfig {
 
   @Bean
-  @ConfigurationProperties("spring.master.datasource")
+  @ConfigurationProperties("spring.datasource.primary.master")
   public DataSourceProperties masterDataSourceProperties() {
     return new DataSourceProperties();
   }
 
-  @Bean
-  @ConfigurationProperties("spring.master.datasource.configuration")
+  @Bean(name = "masterDataSource")
+  @ConfigurationProperties("spring.datasource.primary.master.configuration")
   public DataSource masterDataSource(DataSourceProperties masterDataSourceProperties) {
     return masterDataSourceProperties.initializeDataSourceBuilder()
         .type(HikariDataSource.class)
@@ -34,46 +36,73 @@ public class DataSourceConfig {
   }
 
   @Bean
-  @ConfigurationProperties("spring.slave.datasource")
+  @ConfigurationProperties("spring.datasource.primary.slave")
   public DataSourceProperties slaveDataSourceProperties() {
     return new DataSourceProperties();
   }
 
   @Bean
-  @ConfigurationProperties("spring.slave.datasource.configuration")
+  @ConfigurationProperties("spring.datasource.primary.slave.configuration")
   public DataSource slaveDataSource(DataSourceProperties slaveDataSourceProperties) {
     return slaveDataSourceProperties.initializeDataSourceBuilder()
         .type(HikariDataSource.class).build();
   }
 
   @Bean
+  @ConfigurationProperties("spring.datasource.dialog")
+  public DataSourceProperties dialogDataSourceProperties() {
+    return new DataSourceProperties();
+  }
+
+  @Bean(name = "dialogDataSource")
+  @ConfigurationProperties("spring.datasource.dialog.configuration")
+  public DataSource dialogDataSource(DataSourceProperties dialogDataSourceProperties) {
+    return dialogDataSourceProperties.initializeDataSourceBuilder()
+        .type(HikariDataSource.class)
+        .build();
+  }
+
+  @Bean
+  @ConfigurationProperties(prefix = "spring.datasource.dialog.liquibase")
+  public LiquibaseProperties dialogLiquibaseProperties() {
+    return new LiquibaseProperties();
+  }
+
+  @Bean
+  public SpringLiquibase dialogLiquibase(@Qualifier("dialogDataSource") DataSource dialogDataSource, LiquibaseProperties dialogLiquibaseProperties) {
+    return getSpringLiquibase(dialogDataSource, dialogLiquibaseProperties);
+  }
+
+  @Bean
   @Primary
-  public DataSource routingDataSource(DataSource masterDataSource, DataSource slaveDataSource) {
+  public DataSource routingDataSource(DataSource masterDataSource, DataSource slaveDataSource, DataSource dialogDataSource) {
 
     Map<Object, Object> targetDataSources = new LinkedHashMap<>();
     RoutingDataSourceConfiguration routingDataSourceConfiguration = new RoutingDataSourceConfiguration();
     targetDataSources.put(DataSourceTypes.MASTER, masterDataSource);
     targetDataSources.put(DataSourceTypes.SLAVE, slaveDataSource);
+    targetDataSources.put(DataSourceTypes.DIALOG, dialogDataSource);
     routingDataSourceConfiguration.setTargetDataSources(targetDataSources);
     routingDataSourceConfiguration.setDefaultTargetDataSource(masterDataSource);
     return routingDataSourceConfiguration;
   }
 
   @Bean
-  public DataSource dataSource(DataSource routingDataSource) {
+  public DataSource primaryDataSource(DataSource routingDataSource) {
     return new LazyConnectionDataSourceProxy(routingDataSource);
   }
 
-  @Primary
-  @Bean(name = "readerJdbcTemplate")
-  public NamedParameterJdbcTemplate getReaderJdbcTemplate(DataSource slaveDataSource) {
-    return new NamedParameterJdbcTemplate(slaveDataSource);
+  @Bean
+  @ConfigurationProperties(prefix = "spring.datasource.primary.liquibase")
+  public LiquibaseProperties primaryLiquibaseProperties() {
+    return new LiquibaseProperties();
   }
 
-  @Bean(name = "writerJdbcTemplate")
-  public NamedParameterJdbcTemplate getWriterJdbcTemplate(DataSource masterDataSource) {
-    return new NamedParameterJdbcTemplate(masterDataSource);
+  @Bean
+  public SpringLiquibase masterLiquibase(@Qualifier("masterDataSource") DataSource masterDataSource, LiquibaseProperties primaryLiquibaseProperties) {
+    return getSpringLiquibase(masterDataSource, primaryLiquibaseProperties);
   }
+
 
   private static class RoutingDataSourceConfiguration extends AbstractRoutingDataSource {
     @Override
@@ -83,7 +112,7 @@ public class DataSourceConfig {
   }
 
   public enum DataSourceTypes {
-    MASTER, SLAVE
+    MASTER, SLAVE, DIALOG
   }
 
   public static class DataSourceTypeContextHolder {

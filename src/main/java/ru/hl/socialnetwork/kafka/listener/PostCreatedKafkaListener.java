@@ -31,7 +31,7 @@ public class PostCreatedKafkaListener {
   private final CacheManager cacheManager;
   private final ObjectMapper objectMapper;
 
-  @KafkaListener(topics = "${kafka.topic}")
+  @KafkaListener(topics = "${spring.kafka.topic}")
   @SneakyThrows
   public void consume(ConsumerRecord<String, String> record) {
     String payload = record.value();
