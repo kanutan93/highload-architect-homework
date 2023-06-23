@@ -2,7 +2,7 @@ version: '3.5'
 services:
   backend:
     container_name: backend
-    image: kanutan93/hl-homework:1.0.16
+    image: kanutan93/hl-homework:1.0.17
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -11,6 +11,9 @@ services:
       SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
       SLAVE_DB_USER: 'social_network_user'
       SLAVE_DB_PASSWORD: 'password'
+      DIALOG_DB_URL: 'jdbc:postgresql://master:5432/postgres'
+      DIALOG_DB_USER: 'postgres'
+      DIALOG_DB_PASSWORD: 'password'
       REDIS_HOST: 'redis'
       REDIS_PORT: '6379'
       REDIS_PASSWORD: 'password'
@@ -70,8 +73,6 @@ services:
       PGUSER: 'postgres'
       PGPASSWORD: 'pass'
       POSTGRES_HOST_AUTH_METHOD: "trust"
-    volumes:
-      - ./docker/postgres/citus-master:/var/lib/postgresql/data
     ports:
       - "5435:5432"
   worker:
