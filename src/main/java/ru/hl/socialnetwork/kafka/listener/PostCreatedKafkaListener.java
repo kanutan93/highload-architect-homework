@@ -8,18 +8,16 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import ru.hl.socialnetwork.kafka.payload.PostPayload;
 import ru.hl.socialnetwork.model.dto.response.PostResponseDto;
+import ru.hl.socialnetwork.ws.PostWebSocketHandler;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ru.hl.socialnetwork.kafka.payload.PostPayload.*;
+import static ru.hl.socialnetwork.kafka.payload.PostPayload.Action;
 
 @Slf4j
 @Component
@@ -28,8 +26,10 @@ public class PostCreatedKafkaListener {
 
   private static final String POSTS_FEED_CACHE = "postsFeedCache";
 
+  private final PostWebSocketHandler postWebSocketHandler;
   private final CacheManager cacheManager;
   private final ObjectMapper objectMapper;
+
 
   @KafkaListener(topics = "${spring.kafka.topic}")
   @SneakyThrows
@@ -66,6 +66,8 @@ public class PostCreatedKafkaListener {
                 break;
         }
         postsFeedCache.put(userId, postsFeed);
+
+        postWebSocketHandler.sendPostsToClient(userId, postsFeed);
         log.info("Posts feed cache for userId: {} was updated", userId);
       } else {
         log.info("Posts feed cache for userId: {} is empty", userId);
