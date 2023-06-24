@@ -115,7 +115,7 @@ public class PostServiceImpl implements PostService {
   private void sendPostToFriends(PostPayload.Action action, PostResponseDto post) {
     for (var friendId : friendService.getAllFriendsIds()) {
       PostPayload postPayload = postMapper.toPostPayload(friendId, action, post);
-      kafkaTemplate.send(kafkaTopic, objectMapper.writeValueAsString(postPayload));
+      kafkaTemplate.send(kafkaTopic, String.valueOf(friendId), objectMapper.writeValueAsString(postPayload));
     }
   }
 }

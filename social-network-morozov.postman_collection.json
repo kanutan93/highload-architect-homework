@@ -557,7 +557,7 @@
 							"basic": [
 								{
 									"key": "username",
-									"value": "test2@mail.com",
+									"value": "test@mail.com",
 									"type": "string"
 								},
 								{
