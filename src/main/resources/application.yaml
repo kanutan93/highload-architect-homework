@@ -25,7 +25,7 @@ spring:
     timeout: ${REDIS_TIMEOUT:2000}
   kafka:
     topic: ${KAFKA_TOPIC:posts}
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP_ID:social_network}
       auto-offset-reset: earliest

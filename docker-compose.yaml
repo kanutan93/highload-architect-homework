@@ -17,7 +17,7 @@ services:
       REDIS_HOST: 'redis'
       REDIS_PORT: '6379'
       REDIS_PASSWORD: 'password'
-      KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9092'
+      KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
       KAFKA_CONSUMER_GROUP_ID: 'social_network'
       KAFKA_TOPIC: 'posts'
     ports:
@@ -112,12 +112,12 @@ services:
       - hl-zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka:9091,PLAINTEXT_INTERNAL://localhost:29091
       KAFKA_ZOOKEEPER_CONNECT: hl-zookeeper:2181
-      KAFKA_CREATE_TOPICS: posts:3:1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
     ports:
-      - "9092:9092"
+      - "9091:9091"
+      - "29091:29091"
 
   hl-kafka2:
     container_name: hl-kafka2
@@ -127,12 +127,12 @@ services:
       - hl-zookeeper
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka2:9092,PLAINTEXT_INTERNAL://localhost:29092
       KAFKA_ZOOKEEPER_CONNECT: hl-zookeeper:2181
-      KAFKA_CREATE_TOPICS: posts:3:2
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
     ports:
-      - "9093:9093"
+      - "9092:9092"
+      - "29092:29092"
 
   hl-kafka3:
     container_name: hl-kafka3
@@ -142,12 +142,12 @@ services:
       - hl-zookeeper
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka3:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka3:9093,PLAINTEXT_INTERNAL://localhost:29093
       KAFKA_ZOOKEEPER_CONNECT: hl-zookeeper:2181
-      KAFKA_CREATE_TOPICS: posts:3:3
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
     ports:
-      - "9094:9094"
+      - "9093:9093"
+      - "29093:29093"
 
   hl-zookeeper:
     container_name: hl-zookeeper
