@@ -15,7 +15,7 @@ import static ru.hl.socialnetwork.config.DataSourceConfig.DataSourceTypeContextH
 
 @Aspect
 @Component
-@ConditionalOnProperty(value = "spring.slave.datasource.readonly-slave-enabled", havingValue = "true")
+@ConditionalOnProperty(value = "spring.datasource.primary.slave.readonly-slave-enabled", havingValue = "true")
 public class ReadOnlyConnectionInterceptor implements Ordered {
 
   private int order;

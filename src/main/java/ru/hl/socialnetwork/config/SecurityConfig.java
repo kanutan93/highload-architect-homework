@@ -2,6 +2,7 @@ package ru.hl.socialnetwork.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,13 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   @Bean
-  public UserDetailsService jdbcUserDetailsService(@Qualifier("slaveDataSource") DataSource dataSource) {
-    JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+  @ConditionalOnProperty(value = "spring.datasource.primary.slave.readonly-slave-enabled", havingValue = "false")
+  public UserDetailsService jdbcUserDetailsServiceMaster(@Qualifier("masterDataSource") DataSource masterDataSource) {
+    return jdbcUserDetailsServiceInternal(masterDataSource);
+  }
 
-    users.setUsersByUsernameQuery(USERS_QUERY);
-    users.setAuthoritiesByUsernameQuery(AUTHORITY_QUERY);
-
-    return users;
+  @Bean
+  @ConditionalOnProperty(value = "spring.datasource.primary.slave.readonly-slave-enabled", havingValue = "true")
+  public UserDetailsService jdbcUserDetailsServiceSlave(@Qualifier("slaveDataSource") DataSource slaveDataSource) {
+    return jdbcUserDetailsServiceInternal(slaveDataSource);
   }
 
   @Override
@@ -46,5 +49,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http
         .csrf().disable();
+  }
+
+  private UserDetailsService jdbcUserDetailsServiceInternal(DataSource dataSource) {
+    JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+
+    users.setUsersByUsernameQuery(USERS_QUERY);
+    users.setAuthoritiesByUsernameQuery(AUTHORITY_QUERY);
+
+    return users;
   }
 }

@@ -2,7 +2,9 @@ package ru.hl.socialnetwork.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,12 +39,14 @@ public class DataSourceConfig {
 
   @Bean
   @ConfigurationProperties("spring.datasource.primary.slave")
+  @ConditionalOnProperty(value = "spring.datasource.primary.slave.readonly-slave-enabled", havingValue = "true")
   public DataSourceProperties slaveDataSourceProperties() {
     return new DataSourceProperties();
   }
 
   @Bean
   @ConfigurationProperties("spring.datasource.primary.slave.configuration")
+  @ConditionalOnProperty(value = "spring.datasource.primary.slave.readonly-slave-enabled", havingValue = "true")
   public DataSource slaveDataSource(DataSourceProperties slaveDataSourceProperties) {
     return slaveDataSourceProperties.initializeDataSourceBuilder()
         .type(HikariDataSource.class).build();
@@ -75,12 +79,16 @@ public class DataSourceConfig {
 
   @Bean
   @Primary
-  public DataSource routingDataSource(DataSource masterDataSource, DataSource slaveDataSource, DataSource dialogDataSource) {
+  public DataSource routingDataSource(DataSource masterDataSource,
+                                      @Autowired(required = false) @Qualifier("slaveDataSource") DataSource slaveDataSource,
+                                      DataSource dialogDataSource) {
 
     Map<Object, Object> targetDataSources = new LinkedHashMap<>();
     RoutingDataSourceConfiguration routingDataSourceConfiguration = new RoutingDataSourceConfiguration();
     targetDataSources.put(DataSourceTypes.MASTER, masterDataSource);
-    targetDataSources.put(DataSourceTypes.SLAVE, slaveDataSource);
+    if (slaveDataSource != null) {
+      targetDataSources.put(DataSourceTypes.SLAVE, slaveDataSource);
+    }
     targetDataSources.put(DataSourceTypes.DIALOG, dialogDataSource);
     routingDataSourceConfiguration.setTargetDataSources(targetDataSources);
     routingDataSourceConfiguration.setDefaultTargetDataSource(masterDataSource);
