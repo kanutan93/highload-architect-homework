@@ -123,6 +123,8 @@ services:
     environment:
       TARANTOOL_USER_NAME: tarantool
       TARANTOOL_USER_PASSWORD: password
+    volumes:
+      - ./tarantool:/opt/tarantool
     ports:
       - "3301:3301"
 
