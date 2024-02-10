@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    dialog:
+      url: ${DIALOG_DB_URL:jdbc:postgresql://localhost:5435/social_network_dialog}
+      username: ${DIALOG_DB_USER:social_network_dialog_user}
+      password: ${DIALOG_DB_PASSWORD:password}
+      liquibase:
+        change-log: classpath:/db/changelog/dialog/changelog-master.xml
