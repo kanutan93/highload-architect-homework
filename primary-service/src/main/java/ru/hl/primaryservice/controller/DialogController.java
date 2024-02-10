@@ -1,4 +1,4 @@
-package ru.hl.dialogservice.controller;
+package ru.hl.primaryservice.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.hl.dialogservice.model.dto.request.DialogMessageRequestDto;
-import ru.hl.dialogservice.model.dto.response.DialogMessageResponseDto;
+import ru.hl.primaryservice.model.dto.request.dialog.DialogMessageRequestDto;
+import ru.hl.primaryservice.model.dto.response.DialogMessageResponseDto;
 
 import java.util.List;
 

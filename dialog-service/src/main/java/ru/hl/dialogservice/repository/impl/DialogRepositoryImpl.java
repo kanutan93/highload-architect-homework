@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.hl.dialogservice.mapper.dialog.MessageDaoRowMapper;
 import ru.hl.dialogservice.model.dao.MessageDao;
 import ru.hl.dialogservice.repository.DialogRepository;
 

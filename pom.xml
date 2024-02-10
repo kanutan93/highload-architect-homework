@@ -10,6 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>dialog-service</module>
-        <module>core-service</module>
+        <module>primary-service</module>
     </modules>
 </project>
