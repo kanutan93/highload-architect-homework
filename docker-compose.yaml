@@ -2,7 +2,7 @@ version: '3.5'
 services:
   primary-service:
     container_name: primary-service
-    image: kanutan93/primary-service:1.0.1
+    image: kanutan93/primary-service:1.0.3
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -22,11 +22,11 @@ services:
 
   dialog-service:
     container_name: dialog-service
-    image: kanutan93/dialog-service:1.0.1
+    image: kanutan93/dialog-service:1.0.3
     restart: always
     environment:
-      DIALOG_DB_URL: 'jdbc:postgresql://master:5432/postgres'
-      DIALOG_DB_USER: 'postgres'
+      DIALOG_DB_URL: 'jdbc:postgresql://db-dialog:5432/social_network_dialog'
+      DIALOG_DB_USER: 'social_network_dialog_user'
       DIALOG_DB_PASSWORD: 'password'
     ports:
       - "8082:8080"

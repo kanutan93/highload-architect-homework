@@ -14,9 +14,9 @@ import java.util.List;
 @FeignClient(name = "dialogServiceClient", url = "http://dialog-service:8080")
 public interface DialogServiceClient {
 
-  @GetMapping("/{currentUserId}/{userId}/list")
+  @GetMapping("/api/dialog/{currentUserId}/{userId}/list")
   ResponseEntity<List<DialogMessageResponseDto>> getDialog(@PathVariable Integer currentUserId, @PathVariable Integer userId);
 
-  @PostMapping("/{currentUserId}/{userId}/send")
+  @PostMapping("/api/dialog/{currentUserId}/{userId}/send")
   ResponseEntity<Void> sendMessage(@PathVariable Integer currentUserId, @PathVariable Integer userId, @RequestBody DialogMessageRequestDto dialogMessageRequestDto);
 }

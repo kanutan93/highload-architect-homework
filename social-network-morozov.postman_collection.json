@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "72408dd0-9cbf-44c5-92ab-56664048ff16",
+		"_postman_id": "9efa6d76-afbd-49fa-a29c-6d5343575772",
 		"name": "social-network-morozov",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15634257"
+		"_exporter_id": "1089390"
 	},
 	"item": [
 		{
@@ -17,7 +17,7 @@
 							"basic": [
 								{
 									"key": "username",
-									"value": "test@mail.com",
+									"value": "test2@mail.com",
 									"type": "string"
 								},
 								{
@@ -30,7 +30,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{hl_host}}/api/dialog/7600/list",
+							"raw": "{{hl_host}}/api/dialog/7600/7601/list",
 							"host": [
 								"{{hl_host}}"
 							],
@@ -38,6 +38,7 @@
 								"api",
 								"dialog",
 								"7600",
+								"7601",
 								"list"
 							]
 						}
@@ -74,7 +75,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{hl_host}}/api/dialog/7600/send",
+							"raw": "{{hl_host}}/api/dialog/7600/7601/send",
 							"host": [
 								"{{hl_host}}"
 							],
@@ -82,6 +83,7 @@
 								"api",
 								"dialog",
 								"7600",
+								"7601",
 								"send"
 							]
 						}
