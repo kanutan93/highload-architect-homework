@@ -1,7 +1,7 @@
 FROM maven:3.8.6-openjdk-11 AS build
 
 COPY src/ /src/
-COPY ../pom.xml /pom.xml
+COPY ./pom.xml /pom.xml
 
 RUN mvn clean install -DskipTests
 

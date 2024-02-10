@@ -2,7 +2,7 @@ version: '3.5'
 services:
   primary-service:
     container_name: primary-service
-    image: kanutan93/primary-service:1.0.19
+    image: kanutan93/primary-service:1.0.1
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
