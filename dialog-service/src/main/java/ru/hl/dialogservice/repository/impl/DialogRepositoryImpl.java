@@ -13,11 +13,10 @@ import java.util.List;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class DialogRepositoryImpl implements DialogRepository {
+public class DialogRepositoryImpl {
 
   private final JdbcTemplate jdbcTemplate;
 
-  @Override
   public Integer getDialogId(Integer currentUserId, Integer userId) {
     try {
       return jdbcTemplate.queryForObject("SELECT d.id FROM dialog AS d " +
@@ -30,7 +29,6 @@ public class DialogRepositoryImpl implements DialogRepository {
     }
   }
 
-  @Override
   public Integer createDialog(Integer currentUserId, Integer userId) {
     return jdbcTemplate.queryForObject("INSERT INTO dialog (user1_id, user2_id) " +
             "VALUES (?, ?) " +
@@ -39,7 +37,6 @@ public class DialogRepositoryImpl implements DialogRepository {
         currentUserId, userId);
   }
 
-  @Override
   public List<MessageDao> getMessages(Integer dialogId) {
     return jdbcTemplate.query("SELECT m.id, m.from_id, m.to_id, m.text, m.dialog_id FROM dialog AS d " +
             "JOIN message AS m ON d.id = m.dialog_id " +
@@ -49,7 +46,6 @@ public class DialogRepositoryImpl implements DialogRepository {
         dialogId);
   }
 
-  @Override
   public void createMessage(MessageDao messageDao) {
     jdbcTemplate.update("INSERT INTO message (from_id, to_id, text, dialog_id) " +
             "VALUES (?, ?, ?, ?)",
