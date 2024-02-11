@@ -22,7 +22,7 @@ services:
 
   dialog-service:
     container_name: dialog-service
-    image: kanutan93/dialog-service:1.0.3
+    image: kanutan93/dialog-service:1.0.6
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
