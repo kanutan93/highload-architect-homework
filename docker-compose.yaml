@@ -134,6 +134,7 @@ services:
       TARANTOOL_USER_PASSWORD: password
     volumes:
       - ./tarantool:/opt/tarantool
+    network_mode: host
     ports:
       - "3301:3301"
 

@@ -1,5 +1,5 @@
 tarantool:
-  host: ${TARANTOOL_HOST}
-  port: ${TARANTOOL_PORT}
-  username: ${TARANTOOL_USERNAME}
-  password: ${TARANTOOL_PASSWORD}
+  host: ${TARANTOOL_HOST:localhost}
+  port: ${TARANTOOL_PORT:3301}
+  username: ${TARANTOOL_USERNAME:tarantool}
+  password: ${TARANTOOL_PASSWORD:password}
