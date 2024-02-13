@@ -23,7 +23,7 @@ box.space.message:create_index('message_comp_idx', {type = 'tree', parts = {'dia
 box.schema.sequence.create('message_id_sequence', {if_not_exists = true})
 
 function connected()
-    print('Connected')
+    print('Connected!')
 end
 
 function get_dialog_id(currentUserId, userId)
@@ -34,7 +34,7 @@ function create_dialog(currentUserId, userId)
     box.space.dialog:insert{box.sequence.dialog_id_sequence:next(), currentUserId, userId}
 end
 
-function get_messages(dialog_id)
+function get_messages(dialogId)
     return box.space.message.index.message_comp_idx:select {dialogId}
 end
 

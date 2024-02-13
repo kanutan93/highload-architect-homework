@@ -13,5 +13,5 @@ public interface MessageRepository extends CrudRepository<MessageDao, Integer> {
   List<MessageDao> getMessages(Integer dialogId);
 
   @Query(function = "create_message")
-  MessageDao createMessage(MessageDao dialogDao);
+  void createMessage(Integer currentUserId, Integer userId, String text, Integer dialogId);
 }

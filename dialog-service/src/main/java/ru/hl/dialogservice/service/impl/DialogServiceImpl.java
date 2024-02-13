@@ -65,7 +65,7 @@ public class DialogServiceImpl implements DialogService {
     messageDao.setText(text);
     messageDao.setDialogId(dialogId);
 
-    messageRepository.createMessage(messageDao);
+    messageRepository.createMessage(currentUserId, userId, text, dialogId);
 
     log.info("Message: {} has been sent successfully to user with id: {} from current user with id: {} ", userId, currentUserId);
   }
