@@ -5,16 +5,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.tarantool.core.mapping.Field;
 import org.springframework.data.tarantool.core.mapping.Tuple;
 
-@Tuple("message")
+@Tuple("dialog")
 @Data
-public class MessageDao {
+public class DialogDao {
   @Id
-  private int id;
-  @Field("from_id")
-  private int from;
-  @Field("to_id")
-  private int to;
-  @Field("dialog_id")
-  private int dialogId;
-  private String text;
+  private Integer id;
+  @Field("user1_id")
+  private Integer user1Id;
+  @Field("user2_id")
+  private Integer user2Id;
 }
