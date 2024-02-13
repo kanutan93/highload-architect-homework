@@ -19,11 +19,11 @@ box.space.message:format({
     {name = 'dialog_id', type = 'unsigned'},
 })
 box.space.message:create_index('message_idx', {type = 'tree', parts = {'id', 'dialog_id'}, if_not_exists = true})
-box.space.message:create_index('message_comp_idx', {type = 'tree', parts = {'dialog_id'}, if_not_exists = true})
+box.space.message:create_index('message_comp_idx', {type = 'tree', parts = {'dialog_id'}, if_not_exists = true, unique = false})
 box.schema.sequence.create('message_id_sequence', {if_not_exists = true})
 
 function connected()
-    print('Connected!')
+    print('Connected')
 end
 
 function get_dialog_id(currentUserId, userId)

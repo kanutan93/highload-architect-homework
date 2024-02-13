@@ -31,7 +31,6 @@ public class DialogServiceImpl implements DialogService {
   }
 
   @Override
-  @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
   public List<DialogMessageResponseDto> getMessages(Integer currentUserId, Integer userId) {
     log.info("Try to get dialog messages for user with id: {} and current user with id: {}", userId, currentUserId);
 
@@ -49,7 +48,6 @@ public class DialogServiceImpl implements DialogService {
   }
 
   @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void sendMessage(Integer currentUserId, Integer userId, String text) {
     log.info("Try to send message to user with id: {} from current user with id: {} ", userId);
 
