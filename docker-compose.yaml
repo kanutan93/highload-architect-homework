@@ -132,6 +132,7 @@ services:
     environment:
       TARANTOOL_USER_NAME: tarantool
       TARANTOOL_USER_PASSWORD: password
+    command: tarantool /opt/tarantool/app.lua
     volumes:
       - ./tarantool:/opt/tarantool
     network_mode: host
