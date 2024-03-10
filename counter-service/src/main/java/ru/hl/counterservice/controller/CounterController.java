@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hl.counterservice.model.dto.response.UnreadMessageCounterResponseDto;
 
-import java.util.Set;
+import java.util.List;
 
 @RequestMapping("/api/counter")
 public interface CounterController {
 
   @GetMapping("/{currentUserId}")
-  ResponseEntity<Set<UnreadMessageCounterResponseDto>> getUnreadMessageCounters(@PathVariable Integer currentUserId);
+  ResponseEntity<List<UnreadMessageCounterResponseDto>> getUnreadMessageCounters(@PathVariable Integer currentUserId);
 }

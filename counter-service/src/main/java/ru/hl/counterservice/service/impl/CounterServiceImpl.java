@@ -2,19 +2,17 @@ package ru.hl.counterservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.PartialUpdate;
-import org.springframework.data.redis.core.RedisKeyValueTemplate;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hl.counterservice.mapper.counter.CounterMapper;
 import ru.hl.counterservice.model.dao.CounterDao;
 import ru.hl.counterservice.model.dto.response.UnreadMessageCounterResponseDto;
+import ru.hl.counterservice.repository.CounterRepository;
 import ru.hl.counterservice.service.CounterService;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -24,22 +22,19 @@ import static java.util.Optional.ofNullable;
 @RequiredArgsConstructor
 public class CounterServiceImpl implements CounterService {
 
-  private final RedisTemplate<Integer, CounterDao> redisTemplate;
+  private final CounterRepository counterRepository;
   private final CounterMapper counterMapper;
-  private final RedisKeyValueTemplate redisKeyValueTemplate;
 
   @Override
   @Transactional(readOnly = true)
-  public Set<UnreadMessageCounterResponseDto> getUnreadMessageCounters(Integer currentUserId) {
+  public List<UnreadMessageCounterResponseDto> getUnreadMessageCounters(Integer currentUserId) {
     log.info("Trying to get unread message counters for user with id: {}", currentUserId);
 
-    SetOperations<Integer, CounterDao> opsForSet = redisTemplate.opsForSet();
-    Set<CounterDao> counterDaoSet = ofNullable(opsForSet.members(currentUserId))
-        .orElse(new HashSet<>());
-    Set<UnreadMessageCounterResponseDto> unreadMessageCounters = counterDaoSet
+    List<UnreadMessageCounterResponseDto> unreadMessageCounters = ofNullable(counterRepository.getCounters(currentUserId))
+        .orElse(new ArrayList<>())
         .stream()
         .map(counterMapper::toUnreadMessageCounterResponseDto)
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
 
     log.info("Unread message counters: {} for user with id: {} have been received successfully", unreadMessageCounters, currentUserId);
     return unreadMessageCounters;
@@ -48,24 +43,32 @@ public class CounterServiceImpl implements CounterService {
   @Override
   @Transactional
   public void incrementUnreadMessageCounter(Integer currentUserId, Integer userId) {
-    log.info("Trying to increment message counters for current user with id: {} and user with id: {}", currentUserId, userId);
+    log.info("Trying to increment unread message counter for current user with id: {} and user with id: {}", currentUserId, userId);
 
-    SetOperations<Integer, CounterDao> opsForSet = redisKeyValueTemplate.opsForSet();
-    PartialUpdate<CounterDao> partialUpdate = PartialUpdate.newPartialUpdate(userId, CounterDao.class);
-    Set<CounterDao> counterDaoSet = ofNullable(opsForSet.members(currentUserId))
-        .orElse(new HashSet<>());
-    if (counterDaoSet.isEmpty()) {
-      opsForSet.add(currentUserId, new CounterDao(userId, 1));
+    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(currentUserId, userId));
+    if (unreadMessageCounterOptional.isPresent()) {
+      CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
+      log.info("Unread message counter: {} for current user with id: {} and user with id: {} has been received successfully", unreadMessageCounter, currentUserId, userId);
+      counterRepository.updateCounter(unreadMessageCounter.getId(), currentUserId, userId, unreadMessageCounter.getCount() + 1);
     } else {
-     redisKeyValueTemplate.update(partialUpdate);
+      log.info("Unread message counter for current user with id: {} and user with id: {} not found. Creating new one...", currentUserId, userId);
+      counterRepository.createCounter(currentUserId, userId, 1);
     }
 
     log.info("Unread message counter for current user with id: {} and user with id: {} has been incremented successfully", currentUserId, userId);
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public void clearUnreadMessageCounter(Integer currentUserId, Integer userId) {
+  public void deleteUnreadMessageCounter(Integer currentUserId, Integer userId) {
+    log.info("Trying to delete unread message counter for current user with id: {} and user with id: {}", currentUserId, userId);
 
+    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(currentUserId, userId));
+    if (unreadMessageCounterOptional.isPresent()) {
+      CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
+      counterRepository.deleteCounter(unreadMessageCounter.getId());
+      log.info("Unread message counter for current user with id: {} and user with id: {} has been deleted successfully", currentUserId, userId);
+    } else {
+      log.warn("Unread message counter for current user with id: {} and user with id: {} not found", currentUserId, userId);
+    }
   }
 }

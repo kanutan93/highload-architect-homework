@@ -3,18 +3,24 @@ package ru.hl.counterservice.model.dao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
-
-import java.io.Serializable;
+import org.springframework.data.tarantool.core.mapping.Field;
+import org.springframework.data.tarantool.core.mapping.Tuple;
 
 @Data
 @AllArgsConstructor
-@RedisHash(value = "counter")
-public class CounterDao implements Serializable {
+@Tuple("counter")
+public class CounterDao {
 
   @Id
-  @Indexed
+  @Field("id")
+  private Integer id;
+
+  @Field("current_user_id")
+  private Integer currentUserId;
+
+  @Field("user_id")
   private Integer userId;
+
+  @Field("count")
   private Integer count;
 }
