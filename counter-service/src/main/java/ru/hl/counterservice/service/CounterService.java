@@ -8,7 +8,7 @@ public interface CounterService {
 
   List<UnreadMessageCounterResponseDto> getUnreadMessageCounters(Integer currentUserId);
 
-  void incrementUnreadMessageCounter(Integer currentUserId, Integer userId);
+  void incrementUnreadMessageCounter(Integer receiverUserId, Integer senderUserId);
 
-  void deleteUnreadMessageCounter(Integer currentUserId, Integer userId);
+  void deleteUnreadMessageCounter(Integer receiverUserId, Integer senderUserId);
 }

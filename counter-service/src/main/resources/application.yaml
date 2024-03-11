@@ -1,6 +1,5 @@
 spring:
   kafka:
-    topic: ${KAFKA_TOPIC:unread_message_counters}
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP_ID:counter-service}
@@ -11,3 +10,7 @@ tarantool:
   port: ${TARANTOOL_PORT:3301}
   username: ${TARANTOOL_USERNAME:tarantool}
   password: ${TARANTOOL_PASSWORD:password}
+
+kafka:
+  create-unread-message-counter-topic: ${CREATE_UNREAD_MESSAGE_TOPIC:create-unread-message-topic}
+  delete-unread-message-counter-topic: ${KAFKA_UNREAD_MESSAGE_OUT_TOPIC:delete-unread-message-topic}

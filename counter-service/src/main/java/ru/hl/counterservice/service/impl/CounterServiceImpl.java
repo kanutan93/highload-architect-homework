@@ -1,9 +1,14 @@
 package ru.hl.counterservice.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hl.counterservice.kafka.payload.UnreadMessageCounterPayload;
 import ru.hl.counterservice.mapper.counter.CounterMapper;
 import ru.hl.counterservice.model.dao.CounterDao;
 import ru.hl.counterservice.model.dto.response.UnreadMessageCounterResponseDto;
@@ -23,7 +28,12 @@ import static java.util.Optional.ofNullable;
 public class CounterServiceImpl implements CounterService {
 
   private final CounterRepository counterRepository;
+  private final KafkaTemplate<String, String> kafkaTemplate;
   private final CounterMapper counterMapper;
+  private final ObjectMapper objectMapper;
+
+  @Value("${kafka.delete-unread-message-counter-topic}")
+  private String kafkaTopic;
 
   @Override
   @Transactional(readOnly = true)
@@ -41,34 +51,43 @@ public class CounterServiceImpl implements CounterService {
   }
 
   @Override
+  @SneakyThrows
   @Transactional
-  public void incrementUnreadMessageCounter(Integer currentUserId, Integer userId) {
-    log.info("Trying to increment unread message counter for current user with id: {} and user with id: {}", currentUserId, userId);
+  public void incrementUnreadMessageCounter(Integer receiverUserId, Integer senderUserId) {
+    log.info("Trying to increment unread message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
 
-    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(currentUserId, userId));
-    if (unreadMessageCounterOptional.isPresent()) {
-      CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
-      log.info("Unread message counter: {} for current user with id: {} and user with id: {} has been received successfully", unreadMessageCounter, currentUserId, userId);
-      counterRepository.updateCounter(unreadMessageCounter.getId(), currentUserId, userId, unreadMessageCounter.getCount() + 1);
-    } else {
-      log.info("Unread message counter for current user with id: {} and user with id: {} not found. Creating new one...", currentUserId, userId);
-      counterRepository.createCounter(currentUserId, userId, 1);
+    try {
+      Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(receiverUserId, senderUserId));
+      if (unreadMessageCounterOptional.isPresent()) {
+        CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
+        log.info("Unread message counter: {} for receiver user with id: {} and sender user with id: {} has been received successfully", unreadMessageCounter, receiverUserId, senderUserId);
+        counterRepository.updateCounter(unreadMessageCounter.getId(), receiverUserId, senderUserId, unreadMessageCounter.getCount() + 1);
+      } else {
+        log.info("Unread message counter for receiver user with id: {} and sender user with id: {} not found. Creating new one...", receiverUserId, senderUserId);
+        counterRepository.createCounter(receiverUserId, senderUserId, 1);
+      }
+
+      log.info("Unread message counter for receiver user with id: {} and sender user with id: {} has been incremented successfully", receiverUserId, senderUserId);
+    } catch (Exception e) {
+      log.error("Error on incrementing message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
+      deleteUnreadMessageCounter(receiverUserId, senderUserId);
+      UnreadMessageCounterPayload unreadMessageCounterPayload = new UnreadMessageCounterPayload(senderUserId, receiverUserId);
+      kafkaTemplate.send(kafkaTopic, String.valueOf(senderUserId), objectMapper.writeValueAsString(unreadMessageCounterPayload));
     }
-
-    log.info("Unread message counter for current user with id: {} and user with id: {} has been incremented successfully", currentUserId, userId);
   }
 
   @Override
-  public void deleteUnreadMessageCounter(Integer currentUserId, Integer userId) {
-    log.info("Trying to delete unread message counter for current user with id: {} and user with id: {}", currentUserId, userId);
+  @Transactional
+  public void deleteUnreadMessageCounter(Integer receiverUserId, Integer senderUserId) {
+    log.info("Trying to delete unread message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
 
-    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(currentUserId, userId));
+    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(receiverUserId, senderUserId));
     if (unreadMessageCounterOptional.isPresent()) {
       CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
       counterRepository.deleteCounter(unreadMessageCounter.getId());
-      log.info("Unread message counter for current user with id: {} and user with id: {} has been deleted successfully", currentUserId, userId);
+      log.info("Unread message counter for receiver user with id: {} and sender user with id: {} has been deleted successfully", receiverUserId, senderUserId);
     } else {
-      log.warn("Unread message counter for current user with id: {} and user with id: {} not found", currentUserId, userId);
+      log.warn("Unread message counter for receiver user with id: {} and sender user with id: {} not found", receiverUserId, senderUserId);
     }
   }
 }
