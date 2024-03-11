@@ -27,5 +27,7 @@ public class CreateUnreadMessageCounterKafkaListener {
 
     UnreadMessageCounterPayload unreadMessageCounterPayload = objectMapper.readValue(payload, UnreadMessageCounterPayload.class);
     counterService.incrementUnreadMessageCounter(unreadMessageCounterPayload.getReceiverUserId(), unreadMessageCounterPayload.getSenderUserId());
+
+    log.info("Message: {} has been handled successfully", payload);
   }
 }
