@@ -14,4 +14,10 @@ public interface MessageRepository extends CrudRepository<MessageDao, Integer> {
 
   @Query(function = "create_message")
   void createMessage(Integer currentUserId, Integer userId, String text, Integer dialogId);
+
+  @Query(function = "delete_message")
+  MessageDao getMessage(Integer currentUserId, Integer userId);
+
+  @Query(function = "delete_message")
+  void deleteMessage(Integer id);
 }

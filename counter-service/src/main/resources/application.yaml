@@ -2,7 +2,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
-      group-id: ${KAFKA_CONSUMER_GROUP_ID:dialog-service}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:counter-service}
       auto-offset-reset: earliest
 
 tarantool:

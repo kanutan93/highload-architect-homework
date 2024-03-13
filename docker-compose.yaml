@@ -2,7 +2,7 @@ version: '3.5'
 services:
   primary-service:
     container_name: primary-service
-    image: kanutan93/primary-service:1.0.3
+    image: kanutan93/primary-service:1.0.4
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -22,15 +22,35 @@ services:
 
   dialog-service:
     container_name: dialog-service
-    image: kanutan93/dialog-service:1.0.7
+    image: kanutan93/dialog-service:1.0.8
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
       TARANTOOL_PORT: '3301'
       TARANTOOL_USERNAME: 'tarantool'
       TARANTOOL_PASSWORD: 'password'
+      KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
+      KAFKA_CONSUMER_GROUP_ID: 'dialog-service'
+      CREATE_UNREAD_MESSAGE_TOPIC: 'create-unread-message-topic'
+      DELETE_UNREAD_MESSAGE_TOPIC: 'delete-unread-message-topic'
     ports:
       - "8082:8080"
+
+  counter-service:
+    container_name: counter-service
+    image: kanutan93/counter-service:1.0.4
+    restart: always
+    environment:
+      TARANTOOL_HOST: 'tarantool'
+      TARANTOOL_PORT: '3301'
+      TARANTOOL_USERNAME: 'tarantool'
+      TARANTOOL_PASSWORD: 'password'
+      KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
+      KAFKA_CONSUMER_GROUP_ID: 'counter-service'
+      CREATE_UNREAD_MESSAGE_TOPIC: 'create-unread-message-topic'
+      DELETE_UNREAD_MESSAGE_TOPIC: 'delete-unread-message-topic'
+    ports:
+      - "8083:8080"
 
   db-master:
     container_name: db-master

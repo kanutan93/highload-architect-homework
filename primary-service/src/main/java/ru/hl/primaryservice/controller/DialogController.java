@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hl.primaryservice.model.dto.request.dialog.DialogMessageRequestDto;
 import ru.hl.primaryservice.model.dto.response.DialogMessageResponseDto;
+import ru.hl.primaryservice.model.dto.response.UnreadMessageCounterResponseDto;
 
 import java.util.List;
 
@@ -19,4 +20,7 @@ public interface DialogController {
 
   @PostMapping("/{currentUserId}/{userId}/send")
   ResponseEntity<Void> sendMessage(@PathVariable Integer currentUserId, @PathVariable Integer userId, @RequestBody DialogMessageRequestDto dialogMessageRequestDto);
+
+  @GetMapping("/undead-messages-counter/{currentUserId}")
+  ResponseEntity<List<UnreadMessageCounterResponseDto>> getUnreadMessageCounters(@PathVariable Integer currentUserId);
 }
