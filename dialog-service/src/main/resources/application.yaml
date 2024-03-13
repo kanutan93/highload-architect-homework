@@ -1,3 +1,10 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:dialog-service}
+      auto-offset-reset: earliest
+
 tarantool:
   host: ${TARANTOOL_HOST:localhost}
   port: ${TARANTOOL_PORT:3301}
@@ -6,4 +13,4 @@ tarantool:
 
 kafka:
   create-unread-message-counter-topic: ${CREATE_UNREAD_MESSAGE_TOPIC:create-unread-message-topic}
-  delete-unread-message-counter-topic: ${KAFKA_UNREAD_MESSAGE_OUT_TOPIC:delete-unread-message-topic}
+  delete-unread-message-counter-topic: ${DELETE_UNREAD_MESSAGE_TOPIC:delete-unread-message-topic}
