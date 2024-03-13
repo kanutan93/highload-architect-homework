@@ -2,7 +2,7 @@ version: '3.5'
 services:
   primary-service:
     container_name: primary-service
-    image: kanutan93/primary-service:1.0.3
+    image: kanutan93/primary-service:1.0.4
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -22,7 +22,7 @@ services:
 
   dialog-service:
     container_name: dialog-service
-    image: kanutan93/dialog-service:1.0.7
+    image: kanutan93/dialog-service:1.0.8
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
@@ -38,7 +38,7 @@ services:
 
   counter-service:
     container_name: counter-service
-    image: kanutan93/dialog-service:1.0.7
+    image: kanutan93/counter-service:1.0.1
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
