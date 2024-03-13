@@ -1,13 +1,13 @@
 package ru.hl.counterservice.repository;
 
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.tarantool.repository.Query;
+import org.springframework.data.tarantool.repository.TarantoolRepository;
 import ru.hl.counterservice.model.dao.CounterDao;
 
 import java.util.List;
 
-public interface CounterRepository extends CrudRepository<CounterDao, Integer> {
+public interface CounterRepository extends TarantoolRepository<CounterDao, Integer> {
 
   @Query(function = "get_counters")
   List<CounterDao> getCounters(Integer currentUserId);
