@@ -38,7 +38,7 @@ services:
 
   counter-service:
     container_name: counter-service
-    image: kanutan93/counter-service:1.0.1
+    image: kanutan93/counter-service:1.0.4
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'

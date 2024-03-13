@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +58,7 @@ public class CounterServiceImpl implements CounterService {
     log.info("Trying to increment unread message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
 
     try {
-      Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(receiverUserId, senderUserId));
+      Optional<CounterDao> unreadMessageCounterOptional = getCounter(receiverUserId, senderUserId);
       if (unreadMessageCounterOptional.isPresent()) {
         CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
         log.info("Unread message counter: {} for receiver user with id: {} and sender user with id: {} has been received successfully", unreadMessageCounter, receiverUserId, senderUserId);
@@ -69,7 +70,7 @@ public class CounterServiceImpl implements CounterService {
 
       log.info("Unread message counter for receiver user with id: {} and sender user with id: {} has been incremented successfully", receiverUserId, senderUserId);
     } catch (Exception e) {
-      log.error("Error on incrementing message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
+      log.error("Error on incrementing message counter", e);
       deleteUnreadMessageCounter(receiverUserId, senderUserId);
       UnreadMessageCounterPayload unreadMessageCounterPayload = new UnreadMessageCounterPayload(senderUserId, receiverUserId);
       kafkaTemplate.send(kafkaTopic, String.valueOf(senderUserId), objectMapper.writeValueAsString(unreadMessageCounterPayload));
@@ -81,13 +82,25 @@ public class CounterServiceImpl implements CounterService {
   public void deleteUnreadMessageCounter(Integer receiverUserId, Integer senderUserId) {
     log.info("Trying to delete unread message counter for receiver user with id: {} and sender user with id: {}", receiverUserId, senderUserId);
 
-    Optional<CounterDao> unreadMessageCounterOptional = ofNullable(counterRepository.getCounter(receiverUserId, senderUserId));
-    if (unreadMessageCounterOptional.isPresent()) {
-      CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
-      counterRepository.deleteCounter(unreadMessageCounter.getId());
-      log.info("Unread message counter for receiver user with id: {} and sender user with id: {} has been deleted successfully", receiverUserId, senderUserId);
-    } else {
-      log.warn("Unread message counter for receiver user with id: {} and sender user with id: {} not found", receiverUserId, senderUserId);
+    try {
+      Optional<CounterDao> unreadMessageCounterOptional = getCounter(receiverUserId, senderUserId);
+      if (unreadMessageCounterOptional.isPresent()) {
+        CounterDao unreadMessageCounter = unreadMessageCounterOptional.get();
+        counterRepository.deleteCounter(unreadMessageCounter.getId());
+        log.info("Unread message counter for receiver user with id: {} and sender user with id: {} has been deleted successfully", receiverUserId, senderUserId);
+      } else {
+        log.warn("Unread message counter for receiver user with id: {} and sender user with id: {} not found", receiverUserId, senderUserId);
+      }
+    } catch (Exception e) {
+      log.error("Error on deleting message counter", e);
+    }
+  }
+
+  private Optional<CounterDao> getCounter(Integer receiverUserId, Integer senderUserId) {
+    try {
+      return ofNullable(counterRepository.getCounter(receiverUserId, senderUserId));
+    } catch (DataRetrievalFailureException e) {
+      return Optional.empty();
     }
   }
 }

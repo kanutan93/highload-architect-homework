@@ -24,15 +24,15 @@ box.space.message:create_index('message_from_to_comp_idx', {type = 'tree', parts
 box.schema.sequence.create('message_id_sequence', {if_not_exists = true})
 
 box.schema.space.create('counter', {if_not_exists = true})
-box.space.message:format({
+box.space.counter:format({
     {name = 'id', type = 'unsigned'},
     {name = 'current_user_id', type = 'unsigned'},
     {name = 'user_id', type = 'unsigned'},
     {name = 'count', type = 'unsigned'},
 })
-box.space.message:create_index('counter_idx', {type = 'tree', parts = {'id'}, if_not_exists = true})
-box.space.message:create_index('counter_current_user_id_idx', {type = 'tree', parts = {'current_user_id'}, if_not_exists = true, unique = false})
-box.space.message:create_index('counter_comp_idx', {type = 'tree', parts = {'current_user_id', 'user_id'}, if_not_exists = true, unique = false})
+box.space.counter:create_index('counter_idx', {type = 'tree', parts = {'id'}, if_not_exists = true})
+box.space.counter:create_index('counter_current_user_id_idx', {type = 'tree', parts = {'current_user_id'}, if_not_exists = true, unique = false})
+box.space.counter:create_index('counter_comp_idx', {type = 'tree', parts = {'current_user_id', 'user_id'}, if_not_exists = true, unique = false})
 box.schema.sequence.create('counter_id_sequence', {if_not_exists = true})
 
 function connected()
