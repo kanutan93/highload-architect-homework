@@ -217,6 +217,8 @@ services:
   mysql:
     container_name: mysql
     image: mysql:5.7
+    networks:
+      - monitoring
     ports:
       - '3306:3306'
     volumes:
@@ -232,8 +234,8 @@ services:
   zabbix-server:
     container_name: zabbix-server
     image: zabbix/zabbix-server-mysql:ubuntu-5.0.1
-    links:
-      - mysql
+    networks:
+      - monitoring
     restart: always
     ports:
       - '10051:10051'
@@ -250,8 +252,8 @@ services:
   zabbix-frontend:
     container_name: zabbix-frontend
     image: zabbix/zabbix-web-apache-mysql:ubuntu-5.0.1
-    links:
-      - mysql
+    networks:
+      - monitoring
     restart: always
     ports:
       - '9080:8080'
@@ -267,9 +269,8 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana
-    links:
-      - mysql
-      - zabbix-server
+    networks:
+      - monitoring
     restart: always
     ports:
       - '3000:3000'
@@ -278,14 +279,15 @@ services:
     depends_on:
       - mysql
       - zabbix-server
+      - zabbix-frontend
 
 
   zabbix-agent:
     container_name: zabbix-agent
     image: zabbix/zabbix-agent2:alpine-5.0.1
     user: root
-    links:
-      - zabbix-server
+    networks:
+      - monitoring
     restart: always
     privileged: true
     volumes:
@@ -295,6 +297,10 @@ services:
     environment:
       - ZBX_HOSTNAME=Zabbix server
       - ZBX_SERVER_HOST=zabbix-server
+
+networks:
+  monitoring:
+    driver: bridge
 
 volumes:
   healthcheck-volume:
