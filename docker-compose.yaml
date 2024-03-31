@@ -2,7 +2,9 @@ version: '3.5'
 services:
   primary-service:
     container_name: primary-service
-    image: kanutan93/primary-service:1.0.4
+    image: kanutan93/primary-service:1.0.6
+    networks:
+      - service
     restart: always
     environment:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
@@ -23,6 +25,8 @@ services:
   dialog-service:
     container_name: dialog-service
     image: kanutan93/dialog-service:1.0.8
+    networks:
+      - service
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
@@ -39,6 +43,8 @@ services:
   counter-service:
     container_name: counter-service
     image: kanutan93/counter-service:1.0.4
+    networks:
+      - service
     restart: always
     environment:
       TARANTOOL_HOST: 'tarantool'
@@ -55,6 +61,8 @@ services:
   db-master:
     container_name: db-master
     image: postgres
+    networks:
+      - service
     restart: always
     environment:
       POSTGRES_DB: 'social_network'
@@ -68,6 +76,8 @@ services:
   db-dialog:
     container_name: db-dialog
     image: postgres
+    networks:
+      - service
     restart: always
     environment:
       POSTGRES_DB: 'social_network_dialog'
@@ -139,6 +149,8 @@ services:
   redis:
     container_name: redis
     image: redis
+    networks:
+      - service
     restart: always
     environment:
       REDIS_PASSWORD: 'password'
@@ -148,6 +160,8 @@ services:
   tarantool:
     container_name: tarantool
     image: tarantool/tarantool
+    networks:
+      - service
     restart: always
     environment:
       TARANTOOL_USER_NAME: tarantool
@@ -162,6 +176,8 @@ services:
   hl-kafka:
     container_name: hl-kafka
     image: confluentinc/cp-kafka:latest
+    networks:
+      - service
     restart: always
     depends_on:
       - hl-zookeeper
@@ -177,6 +193,8 @@ services:
   hl-kafka2:
     container_name: hl-kafka2
     image: confluentinc/cp-kafka:latest
+    networks:
+      - service
     restart: always
     depends_on:
       - hl-zookeeper
@@ -192,6 +210,8 @@ services:
   hl-kafka3:
     container_name: hl-kafka3
     image: confluentinc/cp-kafka:latest
+    networks:
+      - service
     restart: always
     depends_on:
       - hl-zookeeper
@@ -207,6 +227,8 @@ services:
   hl-zookeeper:
     container_name: hl-zookeeper
     image: confluentinc/cp-zookeeper:latest
+    networks:
+      - service
     restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -298,7 +320,19 @@ services:
       - ZBX_HOSTNAME=Zabbix server
       - ZBX_SERVER_HOST=zabbix-server
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - monitoring
+      - service
+    ports:
+      - '9090:9090'
+
 networks:
+  service:
+    driver: bridge
   monitoring:
     driver: bridge
 

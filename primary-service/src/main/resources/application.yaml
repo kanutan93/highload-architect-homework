@@ -29,3 +29,6 @@ spring:
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP_ID:social_network}
       auto-offset-reset: earliest
+management:
+  endpoints.web.exposure.include: prometheus
+  metrics.distribution.percentiles-histogram.http.server.requests: true
