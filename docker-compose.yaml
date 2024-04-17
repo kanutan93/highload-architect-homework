@@ -1,7 +1,7 @@
 version: '3.5'
 services:
-  primary-service:
-    container_name: primary-service
+  primary-service-1:
+    container_name: primary-service-1
     image: kanutan93/primary-service:1.0.6
     networks:
       - service
@@ -10,9 +10,9 @@ services:
       MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
       MASTER_DB_USER: 'social_network_user'
       MASTER_DB_PASSWORD: 'password'
-#      SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
-#      SLAVE_DB_USER: 'social_network_user'
-#      SLAVE_DB_PASSWORD: 'password'
+      SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
+      SLAVE_DB_USER: 'social_network_user'
+      SLAVE_DB_PASSWORD: 'password'
       REDIS_HOST: 'redis'
       REDIS_PORT: '6379'
       REDIS_PASSWORD: 'password'
@@ -21,6 +21,28 @@ services:
       KAFKA_TOPIC: 'posts'
     ports:
       - "8080:8080"
+
+  primary-service-2:
+    container_name: primary-service-2
+    image: kanutan93/primary-service:1.0.6
+    networks:
+      - service
+    restart: always
+    environment:
+      MASTER_DB_URL: 'jdbc:postgresql://db-master:5432/social_network'
+      MASTER_DB_USER: 'social_network_user'
+      MASTER_DB_PASSWORD: 'password'
+      SLAVE_DB_URL: 'jdbc:postgresql://db-slave1:5432/social_network'
+      SLAVE_DB_USER: 'social_network_user'
+      SLAVE_DB_PASSWORD: 'password'
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
+      REDIS_PASSWORD: 'password'
+      KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
+      KAFKA_CONSUMER_GROUP_ID: 'social_network'
+      KAFKA_TOPIC: 'posts'
+    ports:
+      - "8081:8080"
 
   dialog-service:
     container_name: dialog-service
