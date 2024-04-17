@@ -87,6 +87,40 @@ services:
       - ./docker/postgres/db-dialog:/var/lib/postgresql/data
     ports:
       - "5435:5432"
+
+  db-dialog-slave-1:
+    container_name: db-dialog-slave-1
+    image: postgres
+    networks:
+      - service
+    restart: always
+    environment:
+      POSTGRES_DB: 'social_network_dialog'
+      POSTGRES_USER: 'social_network_dialog_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-dialog-slave-1:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    depends_on:
+      - db-dialog
+
+  db-dialog-slave-2:
+    container_name: db-dialog-slave-2
+    image: postgres
+    networks:
+      - service
+    restart: always
+    environment:
+      POSTGRES_DB: 'social_network_dialog'
+      POSTGRES_USER: 'social_network_dialog_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-dialog-slave-2:/var/lib/postgresql/data
+    ports:
+      - "5437:5432"
+    depends_on:
+      - db-dialog
 #  db-slave1:
 #    container_name: db-slave1
 #    image: postgres
