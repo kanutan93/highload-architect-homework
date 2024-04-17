@@ -6,7 +6,7 @@ spring:
         username: ${MASTER_DB_USER:social_network_user}
         password: ${MASTER_DB_PASSWORD:password}
       slave:
-        readonly-slave-enabled: false
+        readonly-slave-enabled: true
         url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5433/social_network}
         username: ${SLAVE_DB_USER:social_network_user}
         password: ${SLAVE_DB_PASSWORD:password}
