@@ -19,8 +19,6 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
       KAFKA_CONSUMER_GROUP_ID: 'social_network'
       KAFKA_TOPIC: 'posts'
-    ports:
-      - "8080:8080"
 
   primary-service-2:
     container_name: primary-service-2
@@ -41,8 +39,16 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: 'hl-kafka:9091'
       KAFKA_CONSUMER_GROUP_ID: 'social_network'
       KAFKA_TOPIC: 'posts'
+
+  nginx:
+    build: ./nginx
     ports:
-      - "8081:8080"
+      - "8080:80"
+    networks:
+      - service
+    depends_on:
+      - primary-service-1
+      - primary-service-2
 
   dialog-service:
     container_name: dialog-service
