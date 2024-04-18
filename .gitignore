@@ -34,3 +34,12 @@ build/
 
 ###Docker mounted volume
 docker/
+!docker/haproxy/
+!docker/postgres/db-master/pg_hba.conf
+!docker/postgres/db-master/postgresql.conf
+!docker/postgres/db-slave1/pg_hba.conf
+!docker/postgres/db-slave1/postgresql.conf
+!docker/postgres/db-slave1/standby.signal
+!docker/postgres/db-slave2/pg_hba.conf
+!docker/postgres/db-slave2/postgresql.conf
+!docker/postgres/db-slave2/standby.signal
